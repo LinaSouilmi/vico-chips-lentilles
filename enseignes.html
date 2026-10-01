@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enseignes — Vico chips de lentilles</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="assets/donnees.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Les enseignes, ville par ville</h1>
+  <p class="lead">Indice de prix de chaque magasin relevé : 100 = prix moyen national, calculé sur tous les produits trouvés dans le magasin.</p>
+
+  <div class="grid g2">
+    <div class="card scroll">
+      <h2>Indice par enseigne et par ville</h2>
+      <table class="heat" id="heat"></table>
+      <p class="note">Vert = moins cher que la moyenne, rouge = plus cher. n.d. = pas de magasin relevé (pas d'Auchan près de Rennes).</p>
+    </div>
+    <div class="card">
+      <h2>Moyenne par enseigne</h2>
+      <div class="chart sm"><canvas id="cEns"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Prix du sachet Vico 85 g dans chaque magasin</h2>
+    <div class="chart"><canvas id="cVico"></canvas></div>
+    <p class="note">Saveur fines herbes, sauf quand elle n'était pas disponible (une autre saveur du même prix de gamme a alors été retenue).</p>
+  </div>
+</div>
+<script>
+const villes = DATA.villes.map(v => v.nom);
+const idx = (e, v) => indice(lignes({ enseigne: e, ville: v }));
+let h = `<tr><th>Ville</th>${ENSEIGNES.map(e => `<th class="n">${e}</th>`).join('')}<th class="n">Ville</th></tr>`;
+villes.forEach(v => {
+  h += `<tr><td>${v}</td>` + ENSEIGNES.map(e => { const x = idx(e, v); return `<td class="n" style="background:${couleurIndice(x)}">${x == null ? 'n.d.' : fmt(x, 1)}</td>`; }).join('');
+  const xv = indice(lignes({ ville: v }));
+  h += `<td class="n" style="background:${couleurIndice(xv)}">${fmt(xv, 1)}</td></tr>`;
+});
+h += `<tr><td><b>Enseigne</b></td>` + ENSEIGNES.map(e => { const x = indice(lignes({ enseigne: e })); return `<td class="n" style="background:${couleurIndice(x)}">${fmt(x, 1)}</td>`; }).join('') + '<td></td></tr>';
+document.getElementById('heat').innerHTML = h;
+
+const ensIdx = ENSEIGNES.map(e => indice(lignes({ enseigne: e })));
+new Chart(document.getElementById('cEns'), {
+  type: 'bar',
+  data: { labels: ENSEIGNES, datasets: [{ data: ensIdx, backgroundColor: ENSEIGNES.map(e => COUL_ENS[e]) }] },
+  options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' indice ' + fmt(c.raw, 1) } } },
+    scales: { y: { min: 85, title: { display: true, text: 'Indice (100 = moyenne)' } } } }
+});
+
+new Chart(document.getElementById('cVico'), {
+  type: 'bar',
+  data: { labels: villes, datasets: ENSEIGNES.map(e => ({ label: e, backgroundColor: COUL_ENS[e],
+    data: villes.map(v => { const l = lignes({ p: VICO, enseigne: e, ville: v })[0]; return l ? l.prix : null; }) })) },
+  options: { maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: c => ` ${c.dataset.label} : ${eur(c.raw)}` } } },
+    scales: { y: { min: 1.4, title: { display: true, text: 'Prix du sachet de 85 g (€)' } } } }
+});
+</script>
+</body>
+</html>

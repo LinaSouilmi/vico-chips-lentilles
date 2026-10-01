@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vico chips de lentilles — étude de prix</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/donnees.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Chips de lentilles Vico : quel prix pour un format familial ?</h1>
+  <p class="lead">Étude de prix des chips de lentilles Vico Natur'&amp;Bon face à leurs concurrents : 19 références et 10 grands formats, relevés dans 4 enseignes (Carrefour, Auchan, E.Leclerc, Intermarché) et 7 villes, le <span class="d"></span>.</p>
+
+  <div class="card problem">
+    <h3>Notre problématique</h3>
+    <q>Vico doit-elle lancer un format familial de ses chips aux lentilles de 200 g à 4,99 €, au lieu du sachet de 85 g vendu 2,69 €, et combien de sachets ou de formats familiaux doit-elle vendre pour que cette nouvelle offre soit rentable ?</q>
+  </div>
+
+  <div class="grid g4" id="kpis"></div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h2>Ce qu'on retient</h2>
+      <ul id="retenir"></ul>
+    </div>
+    <div class="card">
+      <h2>Notre démarche</h2>
+      <ol class="steps">
+        <li><a href="concurrents.html">Situer Vico face à ses concurrents</a><br><span class="note">Concurrents directs, indirects et substituts, comparés au prix au kilo.</span></li>
+        <li><a href="carte.html">Comparer les prix selon les régions</a><br><span class="note">Carte de France des prix, ville par ville.</span></li>
+        <li><a href="enseignes.html">Comparer les enseignes</a><br><span class="note">Qui vend le moins cher, et où.</span></li>
+        <li><a href="format-familial.html">Fixer le prix du format familial</a><br><span class="note">Combien les concurrents baissent leur prix au kilo sur les grands formats.</span></li>
+        <li><a href="rentabilite.html">Calculer le seuil de rentabilité</a><br><span class="note">Combien de sachets vendre pour couvrir les coûts du lancement.</span></li>
+      </ol>
+    </div>
+  </div>
+</div>
+<script>
+document.querySelectorAll('.d').forEach(e => e.textContent = DATA.date);
+const v = lignes({ p: VICO });
+const prixMin = Math.min(...v.map(l => l.prix)), prixMax = Math.max(...v.map(l => l.prix));
+const paires = pairesFormats();
+const parProduit = {};
+paires.forEach(x => (parProduit[x.gf.id] ??= []).push(x.baisse));
+const baisseMoy = mean(Object.values(parProduit).map(mean));
+const kgVico = MOY_NAT[VICO];
+const prixConseille = kgVico * (1 + baisseMoy) * 0.2;
+const kg499 = 4.99 / 0.2;
+const k = [
+  [eur(kgVico) + '/kg', 'Prix moyen de Vico 85 g en grande surface', `soit ${eur(kgVico * .085)} le sachet (de ${eur(prixMin)} à ${eur(prixMax)})`],
+  [eur(kg499) + '/kg', 'Prix au kilo du 200 g à 4,99 €', `<span class="ko">${pct(kg499 / kgVico - 1)} par rapport au 85 g</span>`],
+  [pct(baisseMoy, 0), 'Baisse moyenne du prix au kilo', 'quand les concurrents passent au grand format'],
+  [eur(prixConseille), 'Prix cohérent pour 200 g', `en appliquant cette baisse au prix moyen de Vico`]
+];
+document.getElementById('kpis').innerHTML = k.map(([a, b, c]) => `<div class="card kpi"><div class="v">${a}</div><div class="l">${b}</div><div class="s">${c}</div></div>`).join('');
+const villes = DATA.villes.map(c => [c.nom, indice(lignes({ ville: c.nom }))]).sort((a, b) => a[1] - b[1]);
+const ens = ENSEIGNES.map(e => [e, indice(lignes({ enseigne: e }))]).sort((a, b) => a[1] - b[1]);
+document.getElementById('retenir').innerHTML = [
+  `Vico est <b>2 à 3 fois plus cher au kilo</b> que les chips classiques, mais <b>2 fois moins cher</b> que les chips de légumineuses bio (Jardin Bio, Aline &amp; Olivier).`,
+  `Le prix de 2,69 € correspond à un magasin de proximité. En hyper et supermarché, le sachet de 85 g se vend en moyenne <b>${eur(kgVico * .085)}</b>.`,
+  `À 4,99 €, le 200 g serait <b>plus cher au kilo</b> que le 85 g, alors que tous les concurrents font l'inverse.`,
+  `Enseigne la moins chère : <b>${ens[0][0]}</b> (indice ${fmt(ens[0][1], 0)}), la plus chère : <b>${ens[ens.length - 1][0]}</b> (${fmt(ens[ens.length - 1][1], 0)}).`,
+  `Ville la moins chère : <b>${villes[0][0]}</b> (indice ${fmt(villes[0][1], 0)}), la plus chère : <b>${villes[villes.length - 1][0]}</b> (${fmt(villes[villes.length - 1][1], 0)}).`
+].map(x => `<li>${x}</li>`).join('');
+</script>
+</body>
+</html>

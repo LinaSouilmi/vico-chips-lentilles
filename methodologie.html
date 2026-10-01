@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Méthodologie — Vico chips de lentilles</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/donnees.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Méthodologie et limites</h1>
+  <p class="lead">Comment les prix ont été relevés, et ce qu'il faut garder en tête en les lisant.</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <h2>Le relevé</h2>
+      <ul>
+        <li><b>Date</b> : <span class="d"></span>.</li>
+        <li><b>Source</b> : sites de courses en ligne (drive) de Carrefour, Auchan, E.Leclerc et Intermarché.</li>
+        <li><b>Villes</b> : Clermont-Ferrand, Lille, Paris et Île-de-France, Strasbourg, Rennes, Bordeaux, Marseille. Un magasin par enseigne et par ville, de préférence un hypermarché.</li>
+        <li><b>Prix retenu</b> : prix en rayon et prix au kilo affichés par le site. Les offres du type « 2e à -50 % » ou « 3 pour 2 » ne sont pas déduites.</li>
+        <li><b>Références</b> : 19 produits de base en 3 catégories, plus 10 grands formats pour mesurer la baisse du prix au kilo.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Les limites</h2>
+      <ul>
+        <li>Un seul magasin par enseigne et par ville : les prix peuvent varier d'un magasin à l'autre dans une même ville.</li>
+        <li>Pas d'Auchan près de Rennes. Certains produits sont absents de certains magasins : la case reste vide.</li>
+        <li>Quand une saveur ou un format manquait, une variante proche a été retenue (même gamme de prix).</li>
+        <li>Les grands formats ont été relevés dans 5 villes chez Leclerc, 3 chez Carrefour, 2 chez Auchan et 1 chez Intermarché.</li>
+        <li>Les prix en ligne peuvent légèrement différer des prix en magasin.</li>
+        <li>Deux références du premier relevé ont été retirées car trop peu présentes : Bouton d'Or chips de fèves et pop-corn Menguy's.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card scroll">
+    <h2>Les magasins relevés</h2>
+    <table id="mags"></table>
+  </div>
+
+  <div class="card">
+    <h2>Indices de prix</h2>
+    <p>Pour comparer des magasins qui ne vendent pas exactement les mêmes produits, on calcule un <b>indice</b> : pour chaque produit trouvé, on divise son prix au kilo par la moyenne nationale de ce produit, puis on fait la moyenne. 100 = prix moyen ; 105 = 5 % plus cher que la moyenne.</p>
+    <h2>Prix cohérent du format familial</h2>
+    <p>Pour chaque concurrent vendu en petit et en grand format dans le même magasin, on mesure l'écart de prix au kilo. On relie cet écart au rapport de poids entre les deux formats (plus le grand format est lourd, plus le kilo baisse), puis on applique la tendance au passage de 85 g à 200 g de Vico.</p>
+  </div>
+</div>
+<script>
+document.querySelectorAll('.d').forEach(e => e.textContent = DATA.date);
+document.getElementById('mags').innerHTML = `<tr><th>Ville</th><th>Enseigne</th><th>Magasin</th><th class="n">Produits trouvés</th></tr>` +
+  DATA.magasins.slice().sort((a, b) => a.ville.localeCompare(b.ville) || a.enseigne.localeCompare(b.enseigne))
+    .map(m => `<tr><td>${m.ville}</td><td>${m.enseigne}</td><td>${m.nom}</td><td class="n">${LIGNES.filter(l => l.m === m.id).length} / ${DATA.produits.length}</td></tr>`).join('');
+</script>
+</body>
+</html>

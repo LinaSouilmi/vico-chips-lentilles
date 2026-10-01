@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rentabilité — Vico chips de lentilles</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="assets/donnees.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Combien de formats familiaux vendre pour être rentable ?</h1>
+  <p class="lead">Simulateur de seuil de rentabilité. Les valeurs par défaut sont des <b>hypothèses de travail</b>, à remplacer par des données sourcées (rapports annuels, études de marché, entretiens). Bougez les curseurs : tout se recalcule.</p>
+
+  <div class="grid g2">
+    <div class="card sim">
+      <h2>Hypothèses</h2>
+      <h3>Prix de vente en magasin</h3>
+      <label>Prix du format 200 g <span class="val" id="v_p200"></span><input type="range" id="p200" min="2.99" max="5.99" step="0.05" value="4.99"></label>
+      <p class="note" style="margin-top:-8px"><a href="#" id="btnCoherent">Utiliser le prix cohérent calculé sur la page Format familial</a></p>
+      <label>Prix du sachet 85 g <span class="val" id="v_p85"></span><input type="range" id="p85" min="1.49" max="2.99" step="0.05" value="2.69"></label>
+      <h3>Partage de la valeur</h3>
+      <label>Marge du distributeur (% du prix hors taxes) <span class="val" id="v_md"></span><input type="range" id="md" min="15" max="45" step="1" value="30"></label>
+      <label>Coût de production (€/kg, matières + fabrication) <span class="val" id="v_ck"></span><input type="range" id="ck" min="2" max="10" step="0.25" value="5"></label>
+      <label>Emballage du 200 g (€ par sachet) <span class="val" id="v_e200"></span><input type="range" id="e200" min="0.05" max="0.40" step="0.01" value="0.15"></label>
+      <label>Emballage du 85 g (€ par sachet) <span class="val" id="v_e85"></span><input type="range" id="e85" min="0.05" max="0.30" step="0.01" value="0.10"></label>
+      <label>Autres coûts variables (logistique, promotions) en % du prix payé à Vico <span class="val" id="v_cv"></span><input type="range" id="cv" min="0" max="25" step="1" value="10"></label>
+      <h3>Lancement</h3>
+      <label>Coûts fixes du lancement (€) <span class="val" id="v_cf"></span><input type="range" id="cf" min="20000" max="500000" step="5000" value="150000"></label>
+      <label>Sachets de 85 g perdus pour 1 format 200 g vendu (cannibalisation) <span class="val" id="v_can"></span><input type="range" id="can" min="0" max="2" step="0.1" value="0.5"></label>
+      <label>Ventes prévues de 200 g sur un an <span class="val" id="v_vol"></span><input type="range" id="vol" min="10000" max="1000000" step="10000" value="200000"></label>
+    </div>
+
+    <div>
+      <div class="card">
+        <h3>Seuil de rentabilité</h3>
+        <div class="big" id="seuil"></div>
+        <div id="seuilTxt" class="note"></div>
+      </div>
+      <div class="grid g2">
+        <div class="card kpi"><div class="v" id="m200"></div><div class="l">Marge de Vico par format 200 g</div></div>
+        <div class="card kpi"><div class="v" id="m85"></div><div class="l">Marge de Vico par sachet 85 g</div></div>
+      </div>
+      <div class="card kpi"><div class="v" id="res"></div><div class="l" id="resTxt"></div></div>
+      <div class="card">
+        <h3>Résultat selon le nombre de 200 g vendus</h3>
+        <div class="chart sm"><canvas id="c"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Le calcul, étape par étape</h2>
+    <table id="detail"></table>
+    <p class="note">Seuil de rentabilité = coûts fixes ÷ marge supplémentaire par format 200 g. La marge supplémentaire tient compte des sachets de 85 g que le client n'achète plus. TVA alimentaire de 5,5 %.</p>
+  </div>
+
+  <div class="card">
+    <h2>Hypothèses à sourcer</h2>
+    <ul>
+      <li><b>Marge du distributeur</b> : souvent de 25 à 35 % du prix hors taxes sur l'épicerie salée. À confirmer avec des sources (Observatoire de la formation des prix et des marges, presse spécialisée LSA).</li>
+      <li><b>Coût de production</b> : matières premières (farine de lentilles, huile, arômes), énergie, main-d'œuvre. À estimer à partir des comptes d'Intersnack, la maison mère de Vico, ou d'industriels comparables.</li>
+      <li><b>Coûts fixes</b> : adaptation de la ligne de conditionnement, design du nouveau sachet, frais de référencement payés aux enseignes, communication.</li>
+      <li><b>Cannibalisation</b> : part des acheteurs du 200 g qui auraient de toute façon acheté le 85 g. À tester avec un questionnaire consommateurs.</li>
+    </ul>
+  </div>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const ids = ['p200', 'p85', 'md', 'ck', 'e200', 'e85', 'cv', 'cf', 'can', 'vol'];
+const TVA = 0.055;
+const nb = x => Math.round(x).toLocaleString('fr-FR');
+// Prix cohérent : même calcul que sur la page Format familial
+const P = pairesFormats();
+const b = P.reduce((s, x) => s + x.baisse * Math.log(x.ratioTaille), 0) / P.reduce((s, x) => s + Math.log(x.ratioTaille) ** 2, 0);
+const prixCoherent = MOY_NAT[VICO] * (1 + b * Math.log(200 / 85)) * .2;
+$('btnCoherent').onclick = e => { e.preventDefault(); $('p200').value = (Math.round(prixCoherent * 20) / 20).toFixed(2); calc(); };
+let chart;
+function marge(pvc, g, emb, h) {
+  const ht = pvc / (1 + TVA), cession = ht * (1 - h.md / 100), prod = h.ck * g / 1000, autres = cession * h.cv / 100;
+  return { ht, cession, prod, emb, autres, m: cession - prod - emb - autres };
+}
+function calc() {
+  const h = {}; ids.forEach(i => h[i] = +$(i).value);
+  $('v_p200').textContent = eur(h.p200); $('v_p85').textContent = eur(h.p85); $('v_md').textContent = h.md + ' %';
+  $('v_ck').textContent = eur(h.ck) + '/kg'; $('v_e200').textContent = eur(h.e200); $('v_e85').textContent = eur(h.e85);
+  $('v_cv').textContent = h.cv + ' %'; $('v_cf').textContent = nb(h.cf) + ' €'; $('v_can').textContent = fmt(h.can, 1); $('v_vol').textContent = nb(h.vol);
+  const a = marge(h.p200, 200, h.e200, h), c = marge(h.p85, 85, h.e85, h);
+  const inc = a.m - h.can * c.m;
+  $('m200').textContent = eur(a.m); $('m85').textContent = eur(c.m);
+  if (inc <= 0) {
+    $('seuil').innerHTML = '<span class="ko">Jamais rentable</span>';
+    $('seuilTxt').textContent = 'Avec ces hypothèses, chaque format 200 g vendu fait perdre plus de marge (sachets 85 g non vendus) qu\'il n\'en rapporte.';
+  } else {
+    const s = h.cf / inc;
+    $('seuil').textContent = nb(s) + ' formats 200 g';
+    $('seuilTxt').innerHTML = `soit ${nb(s * 200 / 1000)} kg de chips, l'équivalent de <b>${nb(s * 200 / 85)} sachets de 85 g</b> en volume, et ${nb(s * h.p200)} € de chiffre d'affaires en magasin.<br>Pour comparer : couvrir ces coûts avec le seul sachet de 85 g demanderait ${nb(h.cf / c.m)} sachets.`;
+  }
+  const r = h.vol * inc - h.cf;
+  $('res').innerHTML = `<span class="${r >= 0 ? 'ok' : 'ko'}">${(r >= 0 ? '+' : '') + nb(r)} €</span>`;
+  $('resTxt').textContent = `Résultat du lancement avec ${nb(h.vol)} formats 200 g vendus sur un an`;
+  $('detail').innerHTML = `<tr><th></th><th class="n">Format 200 g</th><th class="n">Sachet 85 g</th></tr>` +
+    [['Prix en magasin (TTC)', h.p200, h.p85], ['Prix hors taxes', a.ht, c.ht], ['Prix payé à Vico (après marge distributeur)', a.cession, c.cession],
+     ['– Coût de production', a.prod, c.prod], ['– Emballage', a.emb, c.emb], ['– Autres coûts variables', a.autres, c.autres], ['= Marge de Vico par unité', a.m, c.m]]
+      .map(([l, x, y], i) => `<tr${i === 6 ? ' class="vico"' : ''}><td>${l}</td><td class="n">${eur(x)}</td><td class="n">${eur(y)}</td></tr>`).join('') +
+    `<tr><td>Marge perdue sur les 85 g cannibalisés (${fmt(h.can, 1)} sachet)</td><td class="n">– ${eur(h.can * c.m)}</td><td></td></tr>` +
+    `<tr class="vico"><td>Marge supplémentaire par format 200 g</td><td class="n">${eur(inc)}</td><td></td></tr>`;
+  const max = Math.max(h.vol * 1.5, inc > 0 ? h.cf / inc * 1.5 : h.vol);
+  const pts = Array.from({ length: 21 }, (_, i) => max * i / 20);
+  chart?.destroy();
+  chart = new Chart($('c'), { type: 'line',
+    data: { labels: pts.map(nb), datasets: [{ label: 'Résultat (€)', data: pts.map(v => v * inc - h.cf), borderColor: '#2e7d32', pointRadius: 0, fill: { target: 'origin', above: 'rgba(46,125,50,.12)', below: 'rgba(198,40,40,.12)' } }] },
+    options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + nb(c.raw) + ' €' } } },
+      scales: { x: { title: { display: true, text: 'Formats 200 g vendus' }, ticks: { maxTicksLimit: 6 } }, y: { title: { display: true, text: 'Résultat (€)' } } } } });
+}
+ids.forEach(i => $(i).oninput = calc);
+calc();
+</script>
+</body>
+</html>

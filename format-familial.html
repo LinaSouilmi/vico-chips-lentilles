@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Format familial — Vico chips de lentilles</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="assets/donnees.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Quel prix pour un format familial de 200 g ?</h1>
+  <p class="lead">Pour chaque concurrent vendu en petit et en grand format, on compare le prix au kilo des deux formats dans le même magasin. On en déduit combien un grand format est moins cher au kilo, puis on applique cette baisse à Vico.</p>
+
+  <div class="grid g4" id="kpis"></div>
+
+  <div class="card scroll">
+    <h2>Petit format contre grand format chez les concurrents</h2>
+    <table id="t"></table>
+    <p class="note">Moyennes sur les magasins où les deux formats ont été trouvés en même temps. Baisse = écart de prix au kilo entre le grand et le petit format.</p>
+  </div>
+
+  <div class="grid g2">
+    <div class="card">
+      <h2>Plus le format est grand, plus le kilo baisse</h2>
+      <div class="chart sm"><canvas id="cScatter"></canvas></div>
+      <p class="note">Chaque point = un produit dans un magasin. Axe horizontal : combien de fois le grand format est plus lourd que le petit. Le point rouge montre où se placerait Vico 200 g à 4,99 €.</p>
+    </div>
+    <div class="card">
+      <h2>Où placer le prix du 200 g ?</h2>
+      <div class="chart sm"><canvas id="cPrix"></canvas></div>
+      <p class="note" id="explPrix"></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Notre lecture</h2>
+    <ul id="lecture"></ul>
+  </div>
+</div>
+<script>
+const P = pairesFormats();
+const groupes = {};
+P.forEach(x => (groupes[x.gf.id] ??= []).push(x));
+const lignesT = Object.values(groupes).map(g => ({ gf: g[0].gf, petit: g[0].petit,
+  kgP: mean(g.map(x => x.kgPetit)), kgG: mean(g.map(x => x.kgGrand)), ratio: mean(g.map(x => x.ratioTaille)),
+  baisse: mean(g.map(x => x.baisse)), n: g.length })).sort((a, b) => a.baisse - b.baisse);
+const baisseMoy = mean(lignesT.map(l => l.baisse));
+// Ajustement selon la taille : baisse = b × ln(ratio de taille)
+const b = P.reduce((s, x) => s + x.baisse * Math.log(x.ratioTaille), 0) / P.reduce((s, x) => s + Math.log(x.ratioTaille) ** 2, 0);
+const ratioVico = 200 / 85;
+const baisseVico = b * Math.log(ratioVico);
+const kgV = MOY_NAT[VICO];
+const prixMoy = kgV * (1 + baisseMoy) * .2, prixAjuste = kgV * (1 + baisseVico) * .2;
+const kgProxi = 2.69 / .085, prixProxi = kgProxi * (1 + baisseVico) * .2;
+
+document.getElementById('kpis').innerHTML = [
+  [pct(baisseMoy, 1), 'Baisse moyenne du prix au kilo', 'quand un concurrent passe au grand format'],
+  [pct(baisseVico, 1), 'Baisse attendue pour 85 g → 200 g', `format ${fmt(ratioVico, 2)} fois plus lourd`],
+  [eur(prixAjuste), 'Prix cohérent du 200 g en grande surface', `soit ${eur(prixAjuste / .2)}/kg (Vico 85 g : ${eur(kgV)}/kg)`],
+  [eur(4.99), 'Prix envisagé', `soit ${eur(4.99 / .2)}/kg : <span class="ko">${pct(4.99 / .2 / kgV - 1)} vs 85 g</span>`]
+].map(([a, b, c]) => `<div class="card kpi"><div class="v">${a}</div><div class="l">${b}</div><div class="s">${c}</div></div>`).join('');
+
+document.getElementById('t').innerHTML = `<tr><th>Produit</th><th>Petit format</th><th>Grand format</th><th class="n">€/kg petit</th><th class="n">€/kg grand</th><th class="n">Taille ×</th><th class="n">Baisse au kilo</th><th class="n">Magasins</th></tr>` +
+  lignesT.map(l => `<tr><td>${l.gf.marque}</td><td>${l.petit.nom} (${l.petit.format})</td><td>${l.gf.nom} (${l.gf.format})</td><td class="n">${fmt(l.kgP)}</td><td class="n">${fmt(l.kgG)}</td><td class="n">${fmt(l.ratio, 1)}</td><td class="n" style="color:${l.baisse < 0 ? 'var(--good)' : 'var(--bad)'}">${pct(l.baisse, 1)}</td><td class="n">${l.n}</td></tr>`).join('') +
+  `<tr class="vico"><td>Vico</td><td>Chips de lentilles (85 g)</td><td>Projet 200 g à 4,99 €</td><td class="n">${fmt(kgV)}</td><td class="n">${fmt(4.99 / .2)}</td><td class="n">${fmt(ratioVico, 1)}</td><td class="n" style="color:var(--bad)">${pct(4.99 / .2 / kgV - 1, 1)}</td><td></td></tr>`;
+
+const xs = [1, 5.2];
+new Chart(document.getElementById('cScatter'), {
+  type: 'scatter',
+  data: { datasets: [
+    { label: 'Concurrents', data: P.map(x => ({ x: x.ratioTaille, y: 100 * x.baisse, t: `${x.gf.marque} – ${x.enseigne} ${x.ville}` })), backgroundColor: 'rgba(21,101,192,.6)' },
+    { label: 'Tendance', type: 'line', data: Array.from({ length: 30 }, (_, i) => { const r = 1 + i * .15; return { x: r, y: 100 * b * Math.log(r) }; }), borderColor: '#888', borderDash: [5, 4], pointRadius: 0 },
+    { label: 'Vico 200 g à 4,99 €', data: [{ x: ratioVico, y: 100 * (4.99 / .2 / kgV - 1), t: 'Vico 200 g à 4,99 €' }], backgroundColor: '#c62828', pointRadius: 8 }
+  ] },
+  options: { maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: c => ` ${c.raw.t || ''} : ${fmt(c.raw.y, 1)} %` } } },
+    scales: { x: { title: { display: true, text: 'Grand format / petit format (poids)' } }, y: { title: { display: true, text: 'Écart de prix au kilo (%)' } } } }
+});
+
+const options = [['Prix cohérent (grande surface)', prixAjuste], ['Prix cohérent (base 2,69 € / 85 g)', prixProxi], ['Prix envisagé', 4.99], ['2 × 85 g au prix moyen', kgV * .17]];
+new Chart(document.getElementById('cPrix'), {
+  type: 'bar',
+  data: { labels: options.map(o => o[0]), datasets: [{ data: options.map(o => o[1]), backgroundColor: ['#2e7d32', '#81c784', '#c62828', '#9e9e9e'] }] },
+  options: { maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + eur(c.raw) } } }, scales: { y: { title: { display: true, text: 'Prix du sachet de 200 g (€)' } } } }
+});
+document.getElementById('explPrix').innerHTML = `Avec la baisse attendue de ${pct(baisseVico, 1)}, le 200 g devrait coûter environ <b>${eur(prixAjuste)}</b> si l'on part du prix moyen observé en grande surface (${eur(kgV * .085)} les 85 g), ou <b>${eur(prixProxi)}</b> si l'on part du prix de 2,69 € (prix de proximité).`;
+
+const exceptions = lignesT.filter(l => l.baisse >= 0).map(l => `${l.gf.marque} ${l.gf.format}`);
+document.getElementById('lecture').innerHTML = [
+  `${lignesT.length - exceptions.length} produits sur ${lignesT.length} sont vendus <b>moins cher au kilo</b> en grand format qu'en petit format` + (exceptions.length ? ` (exception : ${exceptions.join(', ')}, un lot de sachets plutôt qu'un vrai format familial).` : '.'),
+  `À 4,99 €, le 200 g de Vico reviendrait à ${eur(4.99 / .2)}/kg, soit <b>${pct(4.99 / .2 / kgV - 1)}</b> par rapport au 85 g vendu en grande surface. Le client paierait plus cher au kilo en achetant plus : le format familial perdrait son intérêt.`,
+  `4,99 € n'est cohérent que face au prix de proximité (2,69 € les 85 g, soit ${eur(kgProxi)}/kg). Dans les hypers et supermarchés, qui font l'essentiel des volumes, un prix autour de <b>${eur(Math.floor(prixAjuste * 10) / 10 - .01)}</b> à <b>${eur(Math.ceil(prixAjuste * 10) / 10 - .01)}</b> serait plus logique.`,
+  `Le prix retenu change directement la marge par sachet, donc le nombre de sachets à vendre : voir la page <a href="rentabilite.html">Rentabilité</a>.`
+].map(x => `<li>${x}</li>`).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Concurrents — Vico chips de lentilles</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="assets/donnees.js"></script>
+<script src="assets/app.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Vico face à ses concurrents</h1>
+  <p class="lead">Prix moyen au kilo de chaque référence. On compare au kilo car les formats varient de 50 g à 200 g.</p>
+
+  <div class="grid g3">
+    <div class="card"><span class="tag t-direct">Concurrents directs</span><p class="note">Chips de légumineuses ou de légumes, et chips « moins grasses » : même promesse santé que Vico.</p></div>
+    <div class="card"><span class="tag t-indirect">Concurrents indirects</span><p class="note">Chips de pomme de terre classiques : même usage (apéritif, grignotage), sans l'argument santé.</p></div>
+    <div class="card"><span class="tag t-substitut">Substituts</span><p class="note">Autres produits d'apéritif qui peuvent remplacer des chips : biscuits soufflés, crackers, cacahuètes, bretzels.</p></div>
+  </div>
+
+  <div class="card">
+    <div class="controls">
+      <label>Enseigne<select id="ens"></select></label>
+      <label>Ville<select id="ville"></select></label>
+    </div>
+    <div class="legend" id="leg"></div>
+    <div class="chart" style="height:560px"><canvas id="c"></canvas></div>
+  </div>
+
+  <div class="card scroll">
+    <h2>Détail par référence</h2>
+    <table id="t"></table>
+    <p class="note">Indice Vico : 100 = prix au kilo de Vico. Un indice de 200 signifie deux fois plus cher au kilo que Vico. « Relevés » = nombre de magasins où le produit a été trouvé.</p>
+  </div>
+</div>
+<script>
+option(document.getElementById('ens'), ENSEIGNES, v => v, 'Toutes les enseignes');
+option(document.getElementById('ville'), DATA.villes.map(v => v.nom), v => v, 'Toutes les villes');
+document.getElementById('leg').innerHTML = Object.entries(COUL_CAT).map(([k, c]) => `<span><i style="background:${c}"></i>${k}</span>`).join('');
+let chart;
+function draw() {
+  const f = { enseigne: document.getElementById('ens').value, ville: document.getElementById('ville').value };
+  const rows = DATA.produits.map(p => {
+    const ls = lignes({ ...f, p: p.id });
+    return { p, kg: mean(ls.map(l => l.kg)), min: ls.length ? Math.min(...ls.map(l => l.kg)) : null, max: ls.length ? Math.max(...ls.map(l => l.kg)) : null, n: ls.length };
+  }).filter(r => r.n).sort((a, b) => b.kg - a.kg);
+  const vico = rows.find(r => r.p.id === VICO);
+  chart?.destroy();
+  chart = new Chart(document.getElementById('c'), {
+    type: 'bar',
+    data: { labels: rows.map(r => `${r.p.marque} – ${r.p.nom} (${r.p.format})`),
+      datasets: [{ data: rows.map(r => r.kg), backgroundColor: rows.map(r => COUL_CAT[r.p.cat]) }] },
+    options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false },
+      tooltip: { callbacks: { label: c => ` ${eur(c.raw)} / kg` } } },
+      scales: { x: { title: { display: true, text: '€ / kg' } }, y: { ticks: { font: { size: 11 } } } } }
+  });
+  document.getElementById('t').innerHTML = `<tr><th>Catégorie</th><th>Référence</th><th class="n">Prix moyen €/kg</th><th class="n">Min</th><th class="n">Max</th><th class="n">Indice Vico</th><th class="n">Relevés</th></tr>` +
+    rows.map(r => `<tr class="${r.p.id === VICO ? 'vico' : ''}"><td><span class="tag ${CAT_CLASS[r.p.cat]}">${r.p.cat}</span></td><td>${r.p.marque} – ${r.p.nom} (${r.p.format})</td><td class="n">${fmt(r.kg)}</td><td class="n">${fmt(r.min)}</td><td class="n">${fmt(r.max)}</td><td class="n">${vico ? fmt(100 * r.kg / vico.kg, 0) : '–'}</td><td class="n">${r.n}</td></tr>`).join('');
+}
+document.querySelectorAll('select').forEach(s => s.onchange = draw);
+draw();
+</script>
+</body>
+</html>
