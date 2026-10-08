@@ -48,14 +48,29 @@ select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);borde
 .choix label{flex-direction:column;align-items:flex-start;gap:2px}
 .choix label .l1{display:flex;gap:10px;align-items:center;font-weight:600}
 .choix label .l2{font-size:14px;color:var(--muted);padding-left:28px}
+/* Liste des autres marques */
+.sousliste{display:none;flex-direction:column;gap:6px;margin:-2px 0 2px 28px}
+.sousliste.on{display:flex}
+.sousliste label{padding:9px 12px;font-size:15px}
+.fleche{margin-left:auto;color:var(--muted)}
+/* Choix 85 g / 200 g illustré */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
+.duo label{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;gap:6px;padding:12px 8px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer}
+.duo label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.duo img{height:auto;display:block}
+.duo .p85 img{width:60%}
+.duo .p200 img{width:92%}
+.duo b{font-size:15px} .duo .kg{font-size:13px;color:var(--muted)}
+.duo input{accent-color:var(--accent);width:18px;height:18px}
 /* Tableau des enseignes */
-.grille .ligne{padding:10px 0;border-bottom:1px solid var(--line)}
-.grille .ligne:last-child{border-bottom:0}
-.grille .nom{font-weight:600;margin-bottom:6px}
-.grille .ech{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
-.grille .ech label{display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;line-height:1.15;min-height:40px;padding:4px 2px;border:1.5px solid var(--line);border-radius:8px;cursor:pointer}
-.grille .ech label:has(input:checked){border-color:var(--accent);background:var(--accent-soft);font-weight:600}
-.grille .ech input{position:absolute;opacity:0;pointer-events:none}
+.tab-ens{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:8px}
+.tab-ens th{font-size:10px;font-weight:600;color:var(--muted);padding:4px 0 8px;line-height:1.15;vertical-align:bottom;text-align:center;letter-spacing:-.1px}
+.tab-ens th:first-child{width:27%}
+.tab-ens td:first-child{font-size:13px;padding-right:4px}
+.tab-ens td{text-align:center;padding:10px 0;border-top:1px solid var(--line)}
+.tab-ens td:first-child{text-align:left;font-weight:600;font-size:14.5px}
+.tab-ens input{accent-color:var(--accent);width:22px;height:22px;cursor:pointer;margin:0}
+.tab-ens tr:has(input:checked) td:first-child{color:var(--accent)}
 /* Agrandissement de la photo */
 img.zoom{cursor:zoom-in}
 .zoomhint{display:inline-block;font-size:13px;color:var(--accent);font-weight:600;cursor:zoom-in;margin-top:2px}
@@ -179,12 +194,13 @@ img.zoom{cursor:zoom-in}
   <!-- 7. Chips de lentilles (seulement si déjà goûtées) -->
   <section class="step card" data-step="lentilles">
     <div class="q">
-      <b>De quelle marque étaient les chips de lentilles que vous avez goûtées ?</b>
+      <b>De quelle(s) marque(s) étaient les chips de lentilles que vous avez goûtées ?</b>
       <span class="muted">Plusieurs réponses possibles.</span>
       <div class="opts">
         <label><input type="checkbox" name="marque" value="vico"> Vico</label>
-        <label><input type="checkbox" name="marque" value="autre" id="marqueAutre"> Autre marque : <input type="text" id="marqueAutreNom" placeholder="laquelle ?"></label>
-        <label><input type="checkbox" name="marque" value="nsp"> Je ne sais pas</label>
+        <label><input type="checkbox" name="marque" value="autres" id="marqueAutres"> Une ou d'autres marques <span class="fleche">▾</span></label>
+        <div class="sousliste" id="sousMarques"></div>
+        <label><input type="checkbox" name="marque" value="nsp" id="marqueNsp"> Je ne sais pas</label>
       </div>
     </div>
     <div class="q">
@@ -218,10 +234,12 @@ img.zoom{cursor:zoom-in}
     </div>
     <div class="q">
       <b>Entre ces deux paquets de chips de lentilles Vico, lequel choisiriez-vous ?</b>
-      <div class="opts choix">
-        <label><span class="l1"><input type="radio" name="choix_format" value="85g"> Sachet de 85 g à 2,69 €</span><span class="l2">soit 31,65 € le kilo</span></label>
-        <label><span class="l1"><input type="radio" name="choix_format" value="200g"> Grand format de 200 g à 4,99 €</span><span class="l2">soit 24,95 € le kilo</span></label>
-        <label><span class="l1"><input type="radio" name="choix_format" value="aucun"> Aucun des deux</span></label>
+      <div class="duo">
+        <label class="p85"><img class="paquet" alt="Sachet de 85 g"><b>Sachet<br>85 g – 2,69 €</b><span class="kg">soit 31,65 € le kilo</span><input type="radio" name="choix_format" value="85g"></label>
+        <label class="p200"><img class="paquet" alt="Grand format de 200 g"><b>Grand format<br>200 g – 4,99 €</b><span class="kg">soit 24,95 € le kilo</span><input type="radio" name="choix_format" value="200g"></label>
+      </div>
+      <div class="opts">
+        <label><input type="radio" name="choix_format" value="aucun"> Aucun des deux</label>
       </div>
     </div>
     <button class="btn" data-next>Suivant</button>
@@ -291,7 +309,7 @@ img.zoom{cursor:zoom-in}
 /* ================= Réglages ================= */
 // Adresse du script Google Apps Script qui enregistre les réponses dans Google Sheets.
 const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzz6syBDH2Jne6uU5eEMyrdvS8pq78MWjCMM709gKWsaAfuWMH4q-8GY1rikts7xJcY/exec';
-const PRIX_GG = [5.99, 5.49, 4.99, 4.49, 3.99, 3.49, 2.99];   // ordre fixe : du plus cher au moins cher
+const PRIX_GG = [4.99, 4.49, 3.99, 3.49, 2.99];   // ordre fixe : du plus cher au moins cher
 const IMAGES = { A: 'paquet-A.jpg', B: 'paquet-B.jpg' };       // A : sans mention santé ; B : avec « -40 % de matières grasses »
 const FORMATS = [
   ['petit', 'Petit sachet', 'moins de 100 g', 0.55],
@@ -308,12 +326,13 @@ const CONTEXTES = [
   ['ctx_sortie', 'En pique-nique ou en sortie'],
   ['ctx_repas', "En accompagnement d'un repas"]
 ];
-const ENSEIGNES = [
-  ['ens_leclerc', 'E.Leclerc'], ['ens_carrefour', 'Carrefour (hyper ou Market)'], ['ens_carrefour_proxi', 'Carrefour City ou Express'],
-  ['ens_auchan', 'Auchan'], ['ens_intermarche', 'Intermarché'], ['ens_u', 'Super U ou Hyper U'], ['ens_lidl', 'Lidl'], ['ens_aldi', 'Aldi'],
-  ['ens_netto', 'Netto'], ['ens_monoprix_franprix', 'Monoprix ou Franprix'], ['ens_bio', 'Magasin bio (Biocoop, La Vie Claire…)'], ['ens_en_ligne', 'Courses en ligne ou drive']
+const ENSEIGNES = [['ens_carrefour', 'Carrefour'], ['ens_auchan', 'Auchan'], ['ens_leclerc', 'E.Leclerc'], ['ens_intermarche', 'Intermarché']];
+// Autres marques de chips de lentilles proposées quand on coche « Une autre marque »
+const AUTRES_MARQUES = [
+  ['marque_jardin_bio', 'Jardin Bio Étic'], ['marque_bjorg', 'Bjorg'], ['marque_aline_olivier', 'Aline & Olivier'],
+  ['marque_mdd', 'Marque du magasin (Carrefour, Auchan, Leclerc…)']
 ];
-const ECHELLE_ENS = ['Jamais', 'Rarement', 'Parfois', 'Souvent', 'Très souvent'];
+const ECHELLE_ENS = ['Jamais', 'Rarement', 'Parfois', 'Souvent', 'Très<br>souvent'];
 const STATUTS = [
   ['etudiant', 'Étudiant(e)'], ['employe', 'Employé(e)'], ['ouvrier', 'Ouvrier(ère)'],
   ['cadre', 'Cadre ou profession intellectuelle supérieure'], ['intermediaire', 'Profession intermédiaire (technicien, agent de maîtrise…)'],
@@ -327,7 +346,7 @@ const COLONNES = ['id', 'date', 'version', 'statut', 'duree_s', 'q1_frequence', 
   'vw_trop_bon_marche', 'vw_bon_marche', 'vw_cher', 'vw_trop_cher', 'vw_coherent',
   ...PRIX_GG.map(p => 'gg_' + p.toFixed(2).replace('.', '_')),
   'controle', 'format_habituel', 'lentilles_goute',
-  'marque_vico', 'marque_autre', 'marque_autre_nom', 'marque_nsp',
+  'marque_vico', ...AUTRES_MARQUES.map(m => m[0]), 'marque_autre', 'marque_autre_nom', 'marque_nsp',
   ...CONTEXTES.map(c => c[0]), 'ctx_autre', 'ctx_autre_txt',
   'achat_lentilles', 'finir_200g', 'choix_format',
   ...ENSEIGNES.map(e => e[0]),
@@ -359,13 +378,26 @@ document.getElementById('formats').innerHTML = FORMATS.map(([v, t, s, h]) =>
   `<label><input type="radio" name="format_habituel" value="${v}">${sachet(h)}<span><b>${t}</b>${s ? '<br><span class="muted">' + s + '</span>' : ''}</span></label>`).join('');
 document.getElementById('contextes').innerHTML = CONTEXTES.map(([n, t]) => `<label><input type="checkbox" name="ctx" value="${n}"> ${t}</label>`).join('') +
   `<label><input type="checkbox" name="ctx" value="ctx_autre" id="ctxAutre"> Autre : <input type="text" id="ctxAutreTxt" placeholder="précisez"></label>`;
-document.getElementById('grille').innerHTML = ENSEIGNES.map(([n, t]) => `<div class="ligne"><div class="nom">${t}</div><div class="ech">` +
-  ECHELLE_ENS.map((e, k) => `<label><input type="radio" name="${n}" value="${k + 1}">${e}</label>`).join('') + '</div></div>').join('');
+document.getElementById('grille').innerHTML = `<table class="tab-ens"><thead><tr><th></th>${ECHELLE_ENS.map(e => `<th>${e}</th>`).join('')}</tr></thead><tbody>` +
+  ENSEIGNES.map(([n, t]) => `<tr><td>${t}</td>${ECHELLE_ENS.map((e, k) => `<td><input type="radio" name="${n}" value="${k + 1}" aria-label="${t} : ${e.replace('<br>', ' ')}"></td>`).join('')}</tr>`).join('') +
+  '</tbody></table>';
+// Liste des autres marques, affichée quand on coche « Une ou d'autres marques »
+document.getElementById('sousMarques').innerHTML = AUTRES_MARQUES.map(([n, t]) => `<label><input type="checkbox" name="autre_marque" value="${n}"> ${t}</label>`).join('') +
+  `<label><input type="checkbox" name="autre_marque" value="marque_autre" id="marqueAutre"> Autre : <input type="text" id="marqueAutreNom" placeholder="laquelle ?"></label>`;
+const cbAutres = document.getElementById('marqueAutres'), cbNsp = document.getElementById('marqueNsp'), sous = document.getElementById('sousMarques');
+cbAutres.addEventListener('change', () => sous.classList.toggle('on', cbAutres.checked));
+// « Je ne sais pas » exclut les autres réponses, et inversement
+document.querySelectorAll('input[name="marque"], input[name="autre_marque"]').forEach(cb => cb.addEventListener('change', () => {
+  if (cb === cbNsp && cbNsp.checked) {
+    document.querySelectorAll('input[name="marque"], input[name="autre_marque"]').forEach(x => { if (x !== cbNsp) x.checked = false; });
+    document.getElementById('marqueAutreNom').value = ''; sous.classList.remove('on');
+  } else if (cb !== cbNsp && cb.checked) cbNsp.checked = false;
+}));
 document.getElementById('statuts').innerHTML = STATUTS.map(([v, t]) => `<label><input type="radio" name="statut_pro" value="${v}"> ${t}</label>`).join('');
 document.getElementById('region').innerHTML += REGIONS.map(r => `<option>${r}</option>`).join('');
 // Écrire dans un champ « Autre » coche automatiquement la case
 [['marqueAutreNom', 'marqueAutre'], ['ctxAutreTxt', 'ctxAutre']].forEach(([t, c]) =>
-  document.getElementById(t).addEventListener('input', e => { if (e.target.value.trim()) document.getElementById(c).checked = true; }));
+  document.getElementById(t).addEventListener('input', e => { if (e.target.value.trim()) { document.getElementById(c).checked = true; if (c === 'marqueAutre') cbNsp.checked = false; } }));
 
 /* ================= Données ================= */
 const rep = Object.fromEntries(COLONNES.map(c => [c, '']));
@@ -438,14 +470,17 @@ document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
     return montrer(rep.lentilles_goute === 'jamais' ? 'habitudes2' : 'lentilles');
   }
   if (courant === 'lentilles') {
-    const m = coches('marque'), c = coches('ctx');
+    const m = coches('marque'), am = m.includes('autres') ? coches('autre_marque') : [], c = coches('ctx');
     const nomAutre = document.getElementById('marqueAutreNom').value.trim(), ctxTxt = document.getElementById('ctxAutreTxt').value.trim();
     if (!m.length) return erreur(s, 'Merci d\'indiquer au moins une marque (ou « Je ne sais pas »).');
-    if (m.includes('autre') && !nomAutre) return erreur(s, 'Merci de préciser l\'autre marque.');
+    if (m.includes('autres') && !am.length) return erreur(s, 'Merci de choisir la ou les autres marques dans la liste.');
+    if (am.includes('marque_autre') && !nomAutre) return erreur(s, 'Merci de préciser l\'autre marque.');
     if (!c.length) return erreur(s, 'Merci de choisir au moins une occasion.');
     if (c.includes('ctx_autre') && !ctxTxt) return erreur(s, 'Merci de préciser l\'autre occasion.');
-    rep.marque_vico = m.includes('vico') ? 1 : 0; rep.marque_autre = m.includes('autre') ? 1 : 0; rep.marque_nsp = m.includes('nsp') ? 1 : 0;
-    rep.marque_autre_nom = m.includes('autre') ? nomAutre : '';
+    rep.marque_vico = m.includes('vico') ? 1 : 0; rep.marque_nsp = m.includes('nsp') ? 1 : 0;
+    AUTRES_MARQUES.forEach(([n]) => rep[n] = am.includes(n) ? 1 : 0);
+    rep.marque_autre = am.includes('marque_autre') ? 1 : 0;
+    rep.marque_autre_nom = am.includes('marque_autre') ? nomAutre : '';
     CONTEXTES.forEach(([n]) => rep[n] = c.includes(n) ? 1 : 0);
     rep.ctx_autre = c.includes('ctx_autre') ? 1 : 0; rep.ctx_autre_txt = c.includes('ctx_autre') ? ctxTxt : '';
     return montrer('habitudes2');
