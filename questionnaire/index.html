@@ -161,11 +161,11 @@ img.zoom{cursor:zoom-in}
     <div class="q">
       <b>Sur le paquet que vous avez vu, y avait-il une mention sur les matières grasses ?</b>
       <div class="opts">
-        <label><input type="radio" name="controle" value="1"> Non, j'en suis sûr(e)</label>
-        <label><input type="radio" name="controle" value="2"> Plutôt non</label>
+        <label><input type="radio" name="controle" value="5"> Oui</label>
+        <label><input type="radio" name="controle" value="4"> Probablement</label>
         <label><input type="radio" name="controle" value="3"> Je ne sais pas</label>
-        <label><input type="radio" name="controle" value="4"> Plutôt oui</label>
-        <label><input type="radio" name="controle" value="5"> Oui, j'en suis sûr(e)</label>
+        <label><input type="radio" name="controle" value="2"> Probablement pas</label>
+        <label><input type="radio" name="controle" value="1"> Non</label>
       </div>
     </div>
     <button class="btn" data-next>Suivant</button>
@@ -299,7 +299,7 @@ img.zoom{cursor:zoom-in}
 
   <section class="step card" data-step="horscible">
     <h1>Merci !</h1>
-    <p>Ce questionnaire s'adresse aux personnes majeures qui achètent des chips ou des biscuits apéritifs au moins une fois par mois. Merci quand même pour votre temps !</p>
+    <p>Ce questionnaire s'adresse aux personnes majeures qui achètent des chips ou des biscuits apéritifs. Merci quand même pour votre temps !</p>
   </section>
 
   <div id="lightbox" role="dialog" aria-label="Photo du paquet agrandie"><button type="button" aria-label="Fermer">×</button><img alt="Paquet de chips de lentilles Vico agrandi"></div>
@@ -447,7 +447,7 @@ document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
     if (!rep.q1_frequence) return erreur(s, 'Merci d\'indiquer votre fréquence d\'achat.');
     if (!/^\d{1,2}$/.test(a) || +a < 10) return erreur(s, 'Merci d\'indiquer votre âge en chiffres (par exemple 24).');
     rep.age = +a;
-    if (rep.age < 18 || ['moins_1_mois', 'jamais'].includes(rep.q1_frequence)) { rep.statut = 'hors_cible'; envoyer(); return montrer('horscible'); }
+    if (rep.age < 18 || rep.q1_frequence === 'jamais') { rep.statut = 'hors_cible'; envoyer(); return montrer('horscible'); }
     return montrer('offre');
   }
   if (courant === 'offre') return montrer('vw');
