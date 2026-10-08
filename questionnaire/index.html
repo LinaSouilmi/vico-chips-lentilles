@@ -45,7 +45,7 @@ select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);borde
 </head>
 <body>
 <div class="wrap">
-  <div class="test" id="testBanner">Mode test : les réponses ne sont pas enregistrées.</div>
+  <div class="test" id="testBanner">Mode test : les réponses sont enregistrées avec le statut « test », à écarter de l'analyse.</div>
   <div class="bar"><i id="prog"></i></div>
 
   <!-- 1. Accueil -->
@@ -197,7 +197,7 @@ select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);borde
 <script>
 /* ================= Réglages ================= */
 // Adresse du script Google Apps Script qui enregistre les réponses dans Google Sheets (à renseigner à l'étape 3).
-const ENDPOINT = '';
+const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzz6syBDH2Jne6uU5eEMyrdvS8pq78MWjCMM709gKWsaAfuWMH4q-8GY1rikts7xJcY/exec';
 const PRIX_GG = [5.99, 5.49, 4.99, 4.49, 3.99, 3.49, 2.99];   // ordre fixe : du plus cher au moins cher
 const IMAGES = { A: 'paquet-A.jpg', B: 'paquet-B.jpg' };       // A : sans mention santé ; B : avec « -40 % de matières grasses »
 const LIKERTS = [
@@ -217,7 +217,7 @@ const COLONNES = ['id', 'date', 'version', 'statut', 'duree_s', 'q1_frequence', 
 const url = new URLSearchParams(location.search);
 const TEST = url.has('test');
 let version = sessionStorage.getItem('version');
-if (url.get('v') === 'A' || url.get('v') === 'B') version = url.get('v');       // pour tester une version précise
+if (TEST && (url.get('v') === 'A' || url.get('v') === 'B')) version = url.get('v');   // en mode test seulement : forcer une version
 if (!version) { version = Math.random() < 0.5 ? 'A' : 'B'; }
 sessionStorage.setItem('version', version);
 document.querySelectorAll('img.paquet').forEach(i => i.src = IMAGES[version]);
@@ -312,8 +312,9 @@ document.getElementById('ggNext').onclick = () => {
 function envoyer() {
   rep.date = new Date().toISOString();
   rep.duree_s = Math.round((Date.now() - t0) / 1000);
+  if (TEST) rep.statut = 'test_' + rep.statut;          // les essais sont enregistrés mais repérables
   const ligne = COLONNES.map(c => rep[c]);
-  if (TEST || !ENDPOINT) { console.table(rep); return; }
+  if (!ENDPOINT) { console.table(rep); return; }
   fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ colonnes: COLONNES, ligne }) })
     .catch(() => document.getElementById('finTxt').textContent = 'Un problème de connexion a empêché l\'envoi. Merci de réessayer plus tard.');
 }
