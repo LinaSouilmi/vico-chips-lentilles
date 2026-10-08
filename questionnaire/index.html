@@ -20,15 +20,13 @@ p{margin:0 0 12px} .muted{color:var(--muted);font-size:14px}
 .opts label{display:flex;gap:10px;align-items:center;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;background:#fff}
 .opts label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
 .opts input{accent-color:var(--accent);width:18px;height:18px;flex:none}
-.likert{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:6px 0 2px}
-.likert label{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 2px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;font-weight:600}
-.likert label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
-.likert input{accent-color:var(--accent)}
-.ends{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:18px}
-.q{margin-bottom:22px} .q > b{display:block;margin-bottom:6px}
+.opts input[type=text]{width:auto;height:auto;flex:1;min-width:0;font:inherit;padding:6px 8px;border:1.5px solid var(--line);border-radius:8px}
+.q{margin-bottom:24px} .q > b{display:block;margin-bottom:6px}
+.q > .muted{display:block;margin:-2px 0 6px}
 .euro{display:flex;align-items:center;gap:8px;margin:8px 0 18px}
-.euro input{font:inherit;font-size:20px;width:130px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px}
-.euro input:focus{outline:none;border-color:var(--accent)}
+.euro input,.age input{font:inherit;font-size:20px;width:130px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px}
+.euro input:focus,.age input:focus{outline:none;border-color:var(--accent)}
+.age{display:flex;align-items:center;gap:8px;margin-top:6px}
 select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:#fff}
 .btn{display:block;width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:var(--accent);color:#fff;font:600 17px system-ui;cursor:pointer}
 .btn:disabled{background:#b9c9ba;cursor:not-allowed}
@@ -41,9 +39,23 @@ select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);borde
 .prix{font-size:40px;font-weight:800;text-align:center;margin:6px 0 4px;letter-spacing:-.02em}
 .consent{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--bg);margin-top:8px}
 .test{background:#fff3cd;color:#7a5600;font-size:13px;padding:6px 10px;border-radius:8px;margin-bottom:10px;display:none}
-.fictif{background:#eef4fb;border-left:4px solid #1565c0;padding:10px 12px;border-radius:8px;font-size:15px}
 .consigne{background:#fff3cd;border:2px solid #f0b400;color:#5c4300;border-radius:12px;padding:12px 14px;font-size:18px;font-weight:700;text-align:center;margin:0 0 14px;line-height:1.35}
 .consigne small{display:block;font-size:14px;font-weight:500;margin-top:4px}
+/* Formats illustrés */
+.formats label{align-items:center}
+.formats svg{flex:none;width:56px;height:56px}
+/* Choix 85 g / 200 g */
+.choix label{flex-direction:column;align-items:flex-start;gap:2px}
+.choix label .l1{display:flex;gap:10px;align-items:center;font-weight:600}
+.choix label .l2{font-size:14px;color:var(--muted);padding-left:28px}
+/* Tableau des enseignes */
+.grille .ligne{padding:10px 0;border-bottom:1px solid var(--line)}
+.grille .ligne:last-child{border-bottom:0}
+.grille .nom{font-weight:600;margin-bottom:6px}
+.grille .ech{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.grille .ech label{display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;line-height:1.15;min-height:40px;padding:4px 2px;border:1.5px solid var(--line);border-radius:8px;cursor:pointer}
+.grille .ech label:has(input:checked){border-color:var(--accent);background:var(--accent-soft);font-weight:600}
+.grille .ech input{position:absolute;opacity:0;pointer-events:none}
 /* Agrandissement de la photo */
 img.zoom{cursor:zoom-in}
 .zoomhint{display:inline-block;font-size:13px;color:var(--accent);font-weight:600;cursor:zoom-in;margin-top:2px}
@@ -63,8 +75,7 @@ img.zoom{cursor:zoom-in}
   <section class="step card" data-step="accueil">
     <h1>Votre avis sur un paquet de chips</h1>
     <p>Bonjour ! Ce questionnaire est réalisé par des étudiants en Master 1 Marketing à l'IAE Clermont Auvergne, dans le cadre d'un projet de cours sur le prix d'un produit alimentaire.</p>
-    <p class="fictif"><b>Il s'agit d'un projet fictif</b>, réalisé uniquement pour un exercice universitaire : nous ne travaillons pas pour la marque Vico, et le produit présenté n'est pas vendu en magasin.</p>
-    <p>Il dure environ <b>4 minutes</b>. Il n'y a pas de bonne ou de mauvaise réponse : seul votre avis compte.</p>
+    <p>Il dure environ <b>3 minutes</b>. Il n'y a pas de bonne ou de mauvaise réponse : seul votre avis compte.</p>
     <p class="muted">Le questionnaire est <b>anonyme</b> : aucun nom, adresse e-mail ou adresse IP n'est enregistré. Les réponses servent uniquement à ce travail universitaire et ne sont pas transmises à des tiers.</p>
     <label class="consent"><input type="checkbox" id="consent"> <span>J'ai compris et j'accepte de participer.</span></label>
     <button class="btn" id="go" disabled>Commencer</button>
@@ -74,7 +85,7 @@ img.zoom{cursor:zoom-in}
   <section class="step card" data-step="filtre">
     <div class="q">
       <b>À quelle fréquence achetez-vous des chips ou des biscuits apéritifs ?</b>
-      <div class="opts" data-name="q1_frequence">
+      <div class="opts">
         <label><input type="radio" name="q1_frequence" value="semaine"> Au moins une fois par semaine</label>
         <label><input type="radio" name="q1_frequence" value="2-3_mois"> 2 à 3 fois par mois</label>
         <label><input type="radio" name="q1_frequence" value="1_mois"> Environ une fois par mois</label>
@@ -83,11 +94,8 @@ img.zoom{cursor:zoom-in}
       </div>
     </div>
     <div class="q">
-      <b>Avez-vous 18 ans ou plus ?</b>
-      <div class="opts">
-        <label><input type="radio" name="q2_majeur" value="oui"> Oui</label>
-        <label><input type="radio" name="q2_majeur" value="non"> Non</label>
-      </div>
+      <b>Quel âge avez-vous ?</b>
+      <div class="age"><input type="number" id="age" inputmode="numeric" min="10" max="99" step="1" placeholder="ex. 24"> ans</div>
     </div>
     <button class="btn" data-next>Suivant</button>
   </section>
@@ -98,14 +106,14 @@ img.zoom{cursor:zoom-in}
     <div class="consigne">👀 Regardez bien le paquet, en détail.<small>Les questions suivantes portent sur ce produit. Touchez la photo pour l'agrandir.</small></div>
     <div class="offre">
       <img class="paquet zoom" alt="Paquet de chips de lentilles Vico Natur'&Bon saveur fines herbes">
-      <p><b>Chips de lentilles Vico Natur'&amp;Bon, saveur fines herbes</b><br>Nouveau <b>format familial de 200 g</b> (environ 8 portions de 25 g).<br>Vendu en grande surface, au rayon apéritif.</p>
+      <p><b>Chips de lentilles Vico Natur'&amp;Bon, saveur fines herbes</b><br>Nouveau <b>grand format de 200 g</b> (environ 8 portions de 25 g).<br>Vendu en grande surface, au rayon apéritif.</p>
     </div>
     <button class="btn" data-next id="btnOffre">J'ai bien regardé le produit</button>
   </section>
 
   <!-- 4a. Van Westendorp -->
   <section class="step card" data-step="vw">
-    <div class="mini"><span class="zoomwrap"><img class="paquet zoom" alt="Paquet de chips de lentilles Vico"><span class="zoomhint">🔍 Agrandir</span></span><span>Chips de lentilles Vico, format familial 200 g</span></div>
+    <div class="mini"><span class="zoomwrap"><img class="paquet zoom" alt="Paquet de chips de lentilles Vico"><span class="zoomhint">🔍 Agrandir</span></span><span>Chips de lentilles Vico, grand format 200 g</span></div>
     <p class="muted">Pour ce paquet de 200 g, indiquez un prix en euros pour chacune des questions suivantes.</p>
     <div class="q"><b>1. À partir de quel prix trouveriez-vous ce paquet <u>si bon marché</u> que vous douteriez de sa qualité ?</b>
       <div class="euro"><input type="number" inputmode="decimal" step="0.01" min="0" id="vw_trop_bon_marche"> €</div></div>
@@ -115,16 +123,15 @@ img.zoom{cursor:zoom-in}
       <div class="euro"><input type="number" inputmode="decimal" step="0.01" min="0" id="vw_cher"> €</div></div>
     <div class="q"><b>4. À partir de quel prix le trouveriez-vous <u>trop cher</u> pour l'acheter ?</b>
       <div class="euro"><input type="number" inputmode="decimal" step="0.01" min="0" id="vw_trop_cher"> €</div></div>
-    <div class="err" id="vwErr"></div>
     <button class="btn" data-next>Suivant</button>
   </section>
 
   <!-- 4b. Gabor-Granger : un écran par prix, toujours du plus cher au moins cher -->
   <section class="step card" data-step="gg">
-    <div class="mini"><span class="zoomwrap"><img class="paquet zoom" alt="Paquet de chips de lentilles Vico"><span class="zoomhint">🔍 Agrandir</span></span><span>Chips de lentilles Vico, format familial 200 g</span></div>
+    <div class="mini"><span class="zoomwrap"><img class="paquet zoom" alt="Paquet de chips de lentilles Vico"><span class="zoomhint">🔍 Agrandir</span></span><span>Chips de lentilles Vico, grand format 200 g</span></div>
     <h2>Achèteriez-vous ce paquet de 200 g à ce prix ?</h2>
     <div class="prix" id="ggPrix"></div>
-    <div class="opts" id="ggOpts">
+    <div class="opts">
       <label><input type="radio" name="gg" value="4"> Oui, certainement</label>
       <label><input type="radio" name="gg" value="3"> Oui, probablement</label>
       <label><input type="radio" name="gg" value="2"> Non, probablement pas</label>
@@ -134,63 +141,135 @@ img.zoom{cursor:zoom-in}
     <button class="btn" id="ggNext">Suivant</button>
   </section>
 
-  <!-- 5. Contrôle -->
+  <!-- 5. Contrôle (pas de photo sur cet écran) -->
   <section class="step card" data-step="controle">
     <div class="q">
       <b>Sur le paquet que vous avez vu, y avait-il une mention sur les matières grasses ?</b>
       <div class="opts">
-        <label><input type="radio" name="q8_controle" value="oui"> Oui</label>
-        <label><input type="radio" name="q8_controle" value="non"> Non</label>
-        <label><input type="radio" name="q8_controle" value="ne_sait_pas"> Je ne sais pas</label>
+        <label><input type="radio" name="controle" value="1"> Non, j'en suis sûr(e)</label>
+        <label><input type="radio" name="controle" value="2"> Plutôt non</label>
+        <label><input type="radio" name="controle" value="3"> Je ne sais pas</label>
+        <label><input type="radio" name="controle" value="4"> Plutôt oui</label>
+        <label><input type="radio" name="controle" value="5"> Oui, j'en suis sûr(e)</label>
       </div>
     </div>
     <button class="btn" data-next>Suivant</button>
   </section>
 
-  <!-- 6. Perception (Likert) -->
-  <section class="step card" data-step="perception">
-    <p class="muted">Pour chaque phrase, indiquez votre degré d'accord, de 1 (pas du tout d'accord) à 5 (tout à fait d'accord).</p>
-    <div id="likerts"></div>
+  <!-- 6. Habitudes (1) -->
+  <section class="step card" data-step="habitudes1">
+    <p class="muted">Quelques questions sur vos habitudes.</p>
+    <div class="q">
+      <b>Quand vous achetez des chips, quel format prenez-vous le plus souvent ?</b>
+      <div class="opts formats" id="formats"></div>
+    </div>
+    <div class="q">
+      <b>Avez-vous déjà goûté des chips de lentilles ?</b>
+      <div class="opts">
+        <label><input type="radio" name="lentilles_goute" value="jamais"> Jamais</label>
+        <label><input type="radio" name="lentilles_goute" value="une_fois"> Une fois</label>
+        <label><input type="radio" name="lentilles_goute" value="quelques_fois"> Quelques fois</label>
+        <label><input type="radio" name="lentilles_goute" value="souvent"> Souvent</label>
+        <label><input type="radio" name="lentilles_goute" value="tres_souvent"> Très souvent</label>
+      </div>
+    </div>
     <button class="btn" data-next>Suivant</button>
   </section>
 
-  <!-- 7. Profil -->
+  <!-- 7. Chips de lentilles (seulement si déjà goûtées) -->
+  <section class="step card" data-step="lentilles">
+    <div class="q">
+      <b>De quelle marque étaient les chips de lentilles que vous avez goûtées ?</b>
+      <span class="muted">Plusieurs réponses possibles.</span>
+      <div class="opts">
+        <label><input type="checkbox" name="marque" value="vico"> Vico</label>
+        <label><input type="checkbox" name="marque" value="autre" id="marqueAutre"> Autre marque : <input type="text" id="marqueAutreNom" placeholder="laquelle ?"></label>
+        <label><input type="checkbox" name="marque" value="nsp"> Je ne sais pas</label>
+      </div>
+    </div>
+    <div class="q">
+      <b>Dans quelles occasions mangez-vous des chips de lentilles ?</b>
+      <span class="muted">Plusieurs réponses possibles.</span>
+      <div class="opts" id="contextes"></div>
+    </div>
+    <button class="btn" data-next>Suivant</button>
+  </section>
+
+  <!-- 8. Habitudes (2) -->
+  <section class="step card" data-step="habitudes2">
+    <div class="q">
+      <b>À quelle fréquence achetez-vous des chips de lentilles ?</b>
+      <div class="opts">
+        <label><input type="radio" name="achat_lentilles" value="jamais"> Jamais</label>
+        <label><input type="radio" name="achat_lentilles" value="moins_1_mois"> Moins d'une fois par mois</label>
+        <label><input type="radio" name="achat_lentilles" value="1_mois"> Environ une fois par mois</label>
+        <label><input type="radio" name="achat_lentilles" value="2-3_mois"> 2 à 3 fois par mois</label>
+        <label><input type="radio" name="achat_lentilles" value="semaine"> Au moins une fois par semaine</label>
+      </div>
+    </div>
+    <div class="q">
+      <b>Si vous achetiez un paquet de chips de 200 g, en combien de fois le finiriez-vous ?</b>
+      <div class="opts">
+        <label><input type="radio" name="finir_200g" value="1_fois"> En une seule fois</label>
+        <label><input type="radio" name="finir_200g" value="2-3_fois"> En 2 ou 3 fois</label>
+        <label><input type="radio" name="finir_200g" value="plus_3_fois"> En plus de 3 fois</label>
+        <label><input type="radio" name="finir_200g" value="pas_fini"> Je ne le finirais probablement pas</label>
+      </div>
+    </div>
+    <div class="q">
+      <b>Entre ces deux paquets de chips de lentilles Vico, lequel choisiriez-vous ?</b>
+      <div class="opts choix">
+        <label><span class="l1"><input type="radio" name="choix_format" value="85g"> Sachet de 85 g à 2,69 €</span><span class="l2">soit 31,65 € le kilo</span></label>
+        <label><span class="l1"><input type="radio" name="choix_format" value="200g"> Grand format de 200 g à 4,99 €</span><span class="l2">soit 24,95 € le kilo</span></label>
+        <label><span class="l1"><input type="radio" name="choix_format" value="aucun"> Aucun des deux</span></label>
+      </div>
+    </div>
+    <button class="btn" data-next>Suivant</button>
+  </section>
+
+  <!-- 9. Enseignes -->
+  <section class="step card" data-step="enseignes">
+    <div class="q grille">
+      <b>À quelle fréquence faites-vous vos courses dans chacune de ces enseignes ?</b>
+      <div id="grille"></div>
+    </div>
+    <button class="btn" data-next>Suivant</button>
+  </section>
+
+  <!-- 10. Profil -->
   <section class="step card" data-step="profil">
     <p class="muted">Pour finir, quelques questions pour mieux connaître les personnes qui ont répondu.</p>
-    <div class="q"><b>Votre tranche d'âge</b>
+    <div class="q"><b>Vous êtes :</b>
       <div class="opts">
-        <label><input type="radio" name="q13_age" value="18-24"> 18 à 24 ans</label>
-        <label><input type="radio" name="q13_age" value="25-34"> 25 à 34 ans</label>
-        <label><input type="radio" name="q13_age" value="35-49"> 35 à 49 ans</label>
-        <label><input type="radio" name="q13_age" value="50-64"> 50 à 64 ans</label>
-        <label><input type="radio" name="q13_age" value="65+"> 65 ans et plus</label>
+        <label><input type="radio" name="genre" value="femme"> Une femme</label>
+        <label><input type="radio" name="genre" value="homme"> Un homme</label>
+        <label><input type="radio" name="genre" value="autre"> Autre</label>
+        <label><input type="radio" name="genre" value="nsp"> Je préfère ne pas répondre</label>
       </div></div>
+    <div class="q"><b>Quelle est votre situation professionnelle ?</b>
+      <div class="opts" id="statuts"></div></div>
     <div class="q"><b>Combien de personnes vivent dans votre foyer, vous compris ?</b>
       <div class="opts">
-        <label><input type="radio" name="q14_foyer" value="1"> 1</label>
-        <label><input type="radio" name="q14_foyer" value="2"> 2</label>
-        <label><input type="radio" name="q14_foyer" value="3"> 3</label>
-        <label><input type="radio" name="q14_foyer" value="4"> 4</label>
-        <label><input type="radio" name="q14_foyer" value="5+"> 5 ou plus</label>
+        <label><input type="radio" name="foyer" value="1"> 1</label>
+        <label><input type="radio" name="foyer" value="2"> 2</label>
+        <label><input type="radio" name="foyer" value="3"> 3</label>
+        <label><input type="radio" name="foyer" value="4"> 4</label>
+        <label><input type="radio" name="foyer" value="5+"> 5 ou plus</label>
       </div></div>
-    <div class="q"><b>Où faites-vous le plus souvent vos courses ?</b>
+    <div class="q"><b>Y a-t-il des enfants de moins de 18 ans dans votre foyer ?</b>
       <div class="opts">
-        <label><input type="radio" name="q15_enseigne" value="carrefour"> Carrefour</label>
-        <label><input type="radio" name="q15_enseigne" value="auchan"> Auchan</label>
-        <label><input type="radio" name="q15_enseigne" value="leclerc"> E.Leclerc</label>
-        <label><input type="radio" name="q15_enseigne" value="intermarche"> Intermarché</label>
-        <label><input type="radio" name="q15_enseigne" value="lidl_aldi"> Lidl ou Aldi</label>
-        <label><input type="radio" name="q15_enseigne" value="autre"> Autre</label>
+        <label><input type="radio" name="enfants" value="oui"> Oui</label>
+        <label><input type="radio" name="enfants" value="non"> Non</label>
       </div></div>
-    <div class="q"><b>Avez-vous déjà acheté des chips de lentilles, de Vico ou d'une autre marque ?</b>
+    <div class="q"><b>Êtes-vous la personne qui fait le plus souvent les courses de votre foyer ?</b>
       <div class="opts">
-        <label><input type="radio" name="q16_deja_achete" value="oui"> Oui</label>
-        <label><input type="radio" name="q16_deja_achete" value="non"> Non</label>
-        <label><input type="radio" name="q16_deja_achete" value="ne_sait_pas"> Je ne sais pas</label>
+        <label><input type="radio" name="courses" value="oui"> Oui</label>
+        <label><input type="radio" name="courses" value="partage"> C'est partagé</label>
+        <label><input type="radio" name="courses" value="non"> Non</label>
       </div></div>
     <div class="q"><b>Dans quelle région habitez-vous ?</b>
-      <select id="q17_region"><option value="">Choisir…</option></select></div>
-    <button class="btn" data-next id="finish">Envoyer mes réponses</button>
+      <select id="region"><option value="">Choisir…</option></select></div>
+    <button class="btn" data-next>Envoyer mes réponses</button>
   </section>
 
   <!-- Fin -->
@@ -200,32 +279,59 @@ img.zoom{cursor:zoom-in}
     <p class="muted">Vous pouvez fermer cette page.</p>
   </section>
 
-  <div id="lightbox" role="dialog" aria-label="Photo du paquet agrandie"><button type="button" aria-label="Fermer">×</button><img alt="Paquet de chips de lentilles Vico agrandi"></div>
-
   <section class="step card" data-step="horscible">
     <h1>Merci !</h1>
     <p>Ce questionnaire s'adresse aux personnes majeures qui achètent des chips ou des biscuits apéritifs au moins une fois par mois. Merci quand même pour votre temps !</p>
   </section>
+
+  <div id="lightbox" role="dialog" aria-label="Photo du paquet agrandie"><button type="button" aria-label="Fermer">×</button><img alt="Paquet de chips de lentilles Vico agrandi"></div>
 </div>
 
 <script>
 /* ================= Réglages ================= */
-// Adresse du script Google Apps Script qui enregistre les réponses dans Google Sheets (à renseigner à l'étape 3).
+// Adresse du script Google Apps Script qui enregistre les réponses dans Google Sheets.
 const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzz6syBDH2Jne6uU5eEMyrdvS8pq78MWjCMM709gKWsaAfuWMH4q-8GY1rikts7xJcY/exec';
 const PRIX_GG = [5.99, 5.49, 4.99, 4.49, 3.99, 3.49, 2.99];   // ordre fixe : du plus cher au moins cher
 const IMAGES = { A: 'paquet-A.jpg', B: 'paquet-B.jpg' };       // A : sans mention santé ; B : avec « -40 % de matières grasses »
-const LIKERTS = [
-  ['q9_qualite', 'Ce produit me paraît de bonne qualité.'],
-  ['q10_sante', 'Ce produit me paraît bon pour la santé.'],
-  ['q11_confiance', 'Je fais confiance à la marque Vico.'],
-  ['q12_format', 'Ce format de 200 g correspond à ma façon de consommer des chips.']
+const FORMATS = [
+  ['petit', 'Petit sachet', 'moins de 100 g', 0.55],
+  ['classique', 'Sachet classique', '100 à 150 g', 0.78],
+  ['grand', 'Grand format', '200 g et plus', 1],
+  ['depend', 'Cela dépend des occasions', '', 0]
+];
+const CONTEXTES = [
+  ['ctx_apero_amis', "À l'apéritif entre amis ou en soirée"],
+  ['ctx_apero_famille', "À l'apéritif en famille"],
+  ['ctx_ecran', 'Devant un film, une série ou un match'],
+  ['ctx_encas', 'En encas dans la journée'],
+  ['ctx_travail', 'Au travail ou pendant les études (pause)'],
+  ['ctx_sortie', 'En pique-nique ou en sortie'],
+  ['ctx_repas', "En accompagnement d'un repas"]
+];
+const ENSEIGNES = [
+  ['ens_leclerc', 'E.Leclerc'], ['ens_carrefour', 'Carrefour (hyper ou Market)'], ['ens_carrefour_proxi', 'Carrefour City ou Express'],
+  ['ens_auchan', 'Auchan'], ['ens_intermarche', 'Intermarché'], ['ens_u', 'Super U ou Hyper U'], ['ens_lidl', 'Lidl'], ['ens_aldi', 'Aldi'],
+  ['ens_netto', 'Netto'], ['ens_monoprix_franprix', 'Monoprix ou Franprix'], ['ens_bio', 'Magasin bio (Biocoop, La Vie Claire…)'], ['ens_en_ligne', 'Courses en ligne ou drive']
+];
+const ECHELLE_ENS = ['Jamais', 'Rarement', 'Parfois', 'Souvent', 'Très souvent'];
+const STATUTS = [
+  ['etudiant', 'Étudiant(e)'], ['employe', 'Employé(e)'], ['ouvrier', 'Ouvrier(ère)'],
+  ['cadre', 'Cadre ou profession intellectuelle supérieure'], ['intermediaire', 'Profession intermédiaire (technicien, agent de maîtrise…)'],
+  ['independant', "Artisan, commerçant ou chef d'entreprise"], ['agriculteur', 'Agriculteur(trice)'],
+  ['recherche_emploi', "En recherche d'emploi"], ['retraite', 'Retraité(e)'], ['autre', 'Autre']
 ];
 const REGIONS = ['Auvergne-Rhône-Alpes', 'Bourgogne-Franche-Comté', 'Bretagne', 'Centre-Val de Loire', 'Corse', 'Grand Est', 'Hauts-de-France', 'Île-de-France', 'Normandie', 'Nouvelle-Aquitaine', 'Occitanie', 'Pays de la Loire', "Provence-Alpes-Côte d'Azur", 'Outre-mer', 'Hors de France'];
+
 // Colonnes enregistrées : toujours les mêmes, dans le même ordre.
-const COLONNES = ['id', 'date', 'version', 'statut', 'duree_s', 'q1_frequence', 'q2_majeur',
+const COLONNES = ['id', 'date', 'version', 'statut', 'duree_s', 'q1_frequence', 'age',
   'vw_trop_bon_marche', 'vw_bon_marche', 'vw_cher', 'vw_trop_cher', 'vw_coherent',
   ...PRIX_GG.map(p => 'gg_' + p.toFixed(2).replace('.', '_')),
-  'q8_controle', ...LIKERTS.map(l => l[0]), 'q13_age', 'q14_foyer', 'q15_enseigne', 'q16_deja_achete', 'q17_region'];
+  'controle', 'format_habituel', 'lentilles_goute',
+  'marque_vico', 'marque_autre', 'marque_autre_nom', 'marque_nsp',
+  ...CONTEXTES.map(c => c[0]), 'ctx_autre', 'ctx_autre_txt',
+  'achat_lentilles', 'finir_200g', 'choix_format',
+  ...ENSEIGNES.map(e => e[0]),
+  'genre', 'statut_pro', 'foyer', 'enfants', 'courses', 'region'];
 
 /* ================= Tirage au sort ================= */
 const url = new URLSearchParams(location.search);
@@ -235,6 +341,7 @@ if (TEST && (url.get('v') === 'A' || url.get('v') === 'B')) version = url.get('v
 if (!version) { version = Math.random() < 0.5 ? 'A' : 'B'; }
 sessionStorage.setItem('version', version);
 document.querySelectorAll('img.paquet').forEach(i => i.src = IMAGES[version]);
+if (TEST) document.getElementById('testBanner').style.display = 'block';
 
 /* ================= Agrandissement de la photo ================= */
 const lb = document.getElementById('lightbox');
@@ -242,7 +349,23 @@ lb.querySelector('img').src = IMAGES[version];
 document.querySelectorAll('img.zoom, .zoomhint').forEach(el => el.addEventListener('click', () => lb.classList.add('on')));
 lb.addEventListener('click', () => lb.classList.remove('on'));
 document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('on'); });
-if (TEST) document.getElementById('testBanner').style.display = 'block';
+
+/* ================= Construction des questions répétitives ================= */
+const sachet = h => h ? `<svg viewBox="0 0 56 56" aria-hidden="true"><g transform="translate(28 ${56 - 2}) scale(${h}) translate(-18 -50)">
+  <path d="M4 4 L32 4 L34 10 L33 44 L35 50 L1 50 L3 44 L2 10 Z" fill="#e8f3e8" stroke="#2f7d32" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M4 10 H32 M3 44 H33" stroke="#2f7d32" stroke-width="1.6"/><ellipse cx="18" cy="27" rx="8" ry="6" fill="#f0b400" opacity=".8"/></g></svg>`
+  : `<svg viewBox="0 0 56 56" aria-hidden="true"><text x="28" y="36" text-anchor="middle" font-size="26" fill="#6e6e73">?</text></svg>`;
+document.getElementById('formats').innerHTML = FORMATS.map(([v, t, s, h]) =>
+  `<label><input type="radio" name="format_habituel" value="${v}">${sachet(h)}<span><b>${t}</b>${s ? '<br><span class="muted">' + s + '</span>' : ''}</span></label>`).join('');
+document.getElementById('contextes').innerHTML = CONTEXTES.map(([n, t]) => `<label><input type="checkbox" name="ctx" value="${n}"> ${t}</label>`).join('') +
+  `<label><input type="checkbox" name="ctx" value="ctx_autre" id="ctxAutre"> Autre : <input type="text" id="ctxAutreTxt" placeholder="précisez"></label>`;
+document.getElementById('grille').innerHTML = ENSEIGNES.map(([n, t]) => `<div class="ligne"><div class="nom">${t}</div><div class="ech">` +
+  ECHELLE_ENS.map((e, k) => `<label><input type="radio" name="${n}" value="${k + 1}">${e}</label>`).join('') + '</div></div>').join('');
+document.getElementById('statuts').innerHTML = STATUTS.map(([v, t]) => `<label><input type="radio" name="statut_pro" value="${v}"> ${t}</label>`).join('');
+document.getElementById('region').innerHTML += REGIONS.map(r => `<option>${r}</option>`).join('');
+// Écrire dans un champ « Autre » coche automatiquement la case
+[['marqueAutreNom', 'marqueAutre'], ['ctxAutreTxt', 'ctxAutre']].forEach(([t, c]) =>
+  document.getElementById(t).addEventListener('input', e => { if (e.target.value.trim()) document.getElementById(c).checked = true; }));
 
 /* ================= Données ================= */
 const rep = Object.fromEntries(COLONNES.map(c => [c, '']));
@@ -251,7 +374,7 @@ rep.version = version;
 const t0 = Date.now();
 
 /* ================= Navigation ================= */
-const ordre = ['accueil', 'filtre', 'offre', 'vw', 'gg', 'controle', 'perception', 'profil', 'fin'];
+const ordre = ['accueil', 'filtre', 'offre', 'vw', 'gg', 'controle', 'habitudes1', 'lentilles', 'habitudes2', 'enseignes', 'profil', 'fin'];
 let courant = 'accueil';
 function montrer(nom) {
   document.querySelectorAll('.step').forEach(s => s.classList.toggle('on', s.dataset.step === nom));
@@ -270,31 +393,29 @@ function attendre(btn, s) {
   tick();
 }
 const val = name => (document.querySelector(`input[name="${name}"]:checked`) || {}).value;
+const coches = name => [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(i => i.value);
 function erreur(section, msg) {
   let e = section.querySelector('.err.auto');
   if (!e) { e = document.createElement('div'); e.className = 'err auto'; section.querySelector('.btn').before(e); }
   e.textContent = msg; e.style.display = msg ? 'block' : 'none';
+  if (msg) e.scrollIntoView({ block: 'center' });
+  return false;
 }
 
-// Accueil
 document.getElementById('consent').onchange = e => document.getElementById('go').disabled = !e.target.checked;
 document.getElementById('go').onclick = () => montrer('filtre');
 
-// Likert
-document.getElementById('likerts').innerHTML = LIKERTS.map(([n, t]) => `<div class="q"><b>${t}</b>
-  <div class="likert">${[1, 2, 3, 4, 5].map(k => `<label><input type="radio" name="${n}" value="${k}">${k}</label>`).join('')}</div>
-  <div class="ends"><span>Pas du tout d'accord</span><span>Tout à fait d'accord</span></div></div>`).join('');
-// Régions
-document.getElementById('q17_region').innerHTML += REGIONS.map(r => `<option>${r}</option>`).join('');
-
-// Boutons « Suivant »
 let vwAverti = false;
 document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
   const s = b.closest('.step');
+  erreur(s, '');
   if (courant === 'filtre') {
-    rep.q1_frequence = val('q1_frequence'); rep.q2_majeur = val('q2_majeur');
-    if (!rep.q1_frequence || !rep.q2_majeur) return erreur(s, 'Merci de répondre aux deux questions.');
-    if (rep.q2_majeur === 'non' || ['moins_1_mois', 'jamais'].includes(rep.q1_frequence)) { rep.statut = 'hors_cible'; envoyer(); return montrer('horscible'); }
+    rep.q1_frequence = val('q1_frequence');
+    const a = String(document.getElementById('age').value).trim();
+    if (!rep.q1_frequence) return erreur(s, 'Merci d\'indiquer votre fréquence d\'achat.');
+    if (!/^\d{1,2}$/.test(a) || +a < 10) return erreur(s, 'Merci d\'indiquer votre âge en chiffres (par exemple 24).');
+    rep.age = +a;
+    if (rep.age < 18 || ['moins_1_mois', 'jamais'].includes(rep.q1_frequence)) { rep.statut = 'hors_cible'; envoyer(); return montrer('horscible'); }
     return montrer('offre');
   }
   if (courant === 'offre') return montrer('vw');
@@ -305,20 +426,43 @@ document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
     const croissant = v.every((x, i) => i === 0 || x >= v[i - 1]);
     if (!croissant && !vwAverti) { vwAverti = true; return erreur(s, 'Vérifiez vos réponses : en principe, les prix augmentent de la question 1 à la question 4. Corrigez si besoin, ou cliquez à nouveau sur « Suivant » pour garder vos réponses.'); }
     ids.forEach((i, k) => rep[i] = v[k]); rep.vw_coherent = croissant ? 1 : 0;
-    erreur(s, ''); ggIndex = 0; afficherGG(); return montrer('gg');
+    ggIndex = 0; afficherGG(); return montrer('gg');
   }
   if (courant === 'controle') {
-    rep.q8_controle = val('q8_controle'); if (!rep.q8_controle) return erreur(s, 'Merci de choisir une réponse.');
-    return montrer('perception');
+    rep.controle = val('controle'); if (!rep.controle) return erreur(s, 'Merci de choisir une réponse.');
+    return montrer('habitudes1');
   }
-  if (courant === 'perception') {
-    for (const [n] of LIKERTS) { rep[n] = val(n); if (!rep[n]) return erreur(s, 'Merci de répondre aux 4 phrases.'); }
+  if (courant === 'habitudes1') {
+    rep.format_habituel = val('format_habituel'); rep.lentilles_goute = val('lentilles_goute');
+    if (!rep.format_habituel || !rep.lentilles_goute) return erreur(s, 'Merci de répondre aux deux questions.');
+    return montrer(rep.lentilles_goute === 'jamais' ? 'habitudes2' : 'lentilles');
+  }
+  if (courant === 'lentilles') {
+    const m = coches('marque'), c = coches('ctx');
+    const nomAutre = document.getElementById('marqueAutreNom').value.trim(), ctxTxt = document.getElementById('ctxAutreTxt').value.trim();
+    if (!m.length) return erreur(s, 'Merci d\'indiquer au moins une marque (ou « Je ne sais pas »).');
+    if (m.includes('autre') && !nomAutre) return erreur(s, 'Merci de préciser l\'autre marque.');
+    if (!c.length) return erreur(s, 'Merci de choisir au moins une occasion.');
+    if (c.includes('ctx_autre') && !ctxTxt) return erreur(s, 'Merci de préciser l\'autre occasion.');
+    rep.marque_vico = m.includes('vico') ? 1 : 0; rep.marque_autre = m.includes('autre') ? 1 : 0; rep.marque_nsp = m.includes('nsp') ? 1 : 0;
+    rep.marque_autre_nom = m.includes('autre') ? nomAutre : '';
+    CONTEXTES.forEach(([n]) => rep[n] = c.includes(n) ? 1 : 0);
+    rep.ctx_autre = c.includes('ctx_autre') ? 1 : 0; rep.ctx_autre_txt = c.includes('ctx_autre') ? ctxTxt : '';
+    return montrer('habitudes2');
+  }
+  if (courant === 'habitudes2') {
+    rep.achat_lentilles = val('achat_lentilles'); rep.finir_200g = val('finir_200g'); rep.choix_format = val('choix_format');
+    if (!rep.achat_lentilles || !rep.finir_200g || !rep.choix_format) return erreur(s, 'Merci de répondre aux trois questions.');
+    return montrer('enseignes');
+  }
+  if (courant === 'enseignes') {
+    for (const [n] of ENSEIGNES) { rep[n] = val(n); if (!rep[n]) return erreur(s, 'Merci de répondre pour chaque enseigne (« Jamais » si vous n\'y allez pas).'); }
     return montrer('profil');
   }
   if (courant === 'profil') {
-    ['q13_age', 'q14_foyer', 'q15_enseigne', 'q16_deja_achete'].forEach(n => rep[n] = val(n) || '');
-    rep.q17_region = document.getElementById('q17_region').value;
-    if (['q13_age', 'q14_foyer', 'q15_enseigne', 'q16_deja_achete', 'q17_region'].some(n => !rep[n])) return erreur(s, 'Merci de répondre à toutes les questions.');
+    ['genre', 'statut_pro', 'foyer', 'enfants', 'courses'].forEach(n => rep[n] = val(n) || '');
+    rep.region = document.getElementById('region').value;
+    if (['genre', 'statut_pro', 'foyer', 'enfants', 'courses', 'region'].some(n => !rep[n])) return erreur(s, 'Merci de répondre à toutes les questions.');
     rep.statut = 'complet'; envoyer(); return montrer('fin');
   }
 });
