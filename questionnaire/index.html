@@ -41,6 +41,17 @@ select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);borde
 .prix{font-size:40px;font-weight:800;text-align:center;margin:6px 0 4px;letter-spacing:-.02em}
 .consent{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--bg);margin-top:8px}
 .test{background:#fff3cd;color:#7a5600;font-size:13px;padding:6px 10px;border-radius:8px;margin-bottom:10px;display:none}
+.fictif{background:#eef4fb;border-left:4px solid #1565c0;padding:10px 12px;border-radius:8px;font-size:15px}
+.consigne{background:#fff3cd;border:2px solid #f0b400;color:#5c4300;border-radius:12px;padding:12px 14px;font-size:18px;font-weight:700;text-align:center;margin:0 0 14px;line-height:1.35}
+.consigne small{display:block;font-size:14px;font-weight:500;margin-top:4px}
+/* Agrandissement de la photo */
+img.zoom{cursor:zoom-in}
+.zoomhint{display:inline-block;font-size:13px;color:var(--accent);font-weight:600;cursor:zoom-in;margin-top:2px}
+.mini .zoomwrap{display:flex;flex-direction:column;align-items:center;flex:none}
+#lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;cursor:zoom-out}
+#lightbox.on{display:flex}
+#lightbox img{max-width:100%;max-height:88vh;height:auto;border-radius:8px;background:#fff}
+#lightbox button{position:absolute;top:12px;right:12px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;font-size:24px;line-height:1;cursor:pointer}
 </style>
 </head>
 <body>
@@ -52,6 +63,7 @@ select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);borde
   <section class="step card" data-step="accueil">
     <h1>Votre avis sur un paquet de chips</h1>
     <p>Bonjour ! Ce questionnaire est réalisé par des étudiants en Master 1 Marketing à l'IAE Clermont Auvergne, dans le cadre d'un projet de cours sur le prix d'un produit alimentaire.</p>
+    <p class="fictif"><b>Il s'agit d'un projet fictif</b>, réalisé uniquement pour un exercice universitaire : nous ne travaillons pas pour la marque Vico, et le produit présenté n'est pas vendu en magasin.</p>
     <p>Il dure environ <b>4 minutes</b>. Il n'y a pas de bonne ou de mauvaise réponse : seul votre avis compte.</p>
     <p class="muted">Le questionnaire est <b>anonyme</b> : aucun nom, adresse e-mail ou adresse IP n'est enregistré. Les réponses servent uniquement à ce travail universitaire et ne sont pas transmises à des tiers.</p>
     <label class="consent"><input type="checkbox" id="consent"> <span>J'ai compris et j'accepte de participer.</span></label>
@@ -83,17 +95,17 @@ select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);borde
   <!-- 3. L'offre (version A ou B : seule l'image change) -->
   <section class="step card" data-step="offre">
     <h2>Voici un nouveau produit</h2>
+    <div class="consigne">👀 Regardez bien le paquet, en détail.<small>Les questions suivantes portent sur ce produit. Touchez la photo pour l'agrandir.</small></div>
     <div class="offre">
-      <img class="paquet" alt="Paquet de chips de lentilles Vico Natur'&Bon saveur fines herbes">
+      <img class="paquet zoom" alt="Paquet de chips de lentilles Vico Natur'&Bon saveur fines herbes">
       <p><b>Chips de lentilles Vico Natur'&amp;Bon, saveur fines herbes</b><br>Nouveau <b>format familial de 200 g</b> (environ 8 portions de 25 g).<br>Vendu en grande surface, au rayon apéritif.</p>
-      <p class="muted">Prenez le temps de bien regarder le paquet avant de continuer.</p>
     </div>
-    <button class="btn" data-next>J'ai bien regardé le produit</button>
+    <button class="btn" data-next id="btnOffre">J'ai bien regardé le produit</button>
   </section>
 
   <!-- 4a. Van Westendorp -->
   <section class="step card" data-step="vw">
-    <div class="mini"><img class="paquet" alt=""><span>Chips de lentilles Vico, format familial 200 g</span></div>
+    <div class="mini"><span class="zoomwrap"><img class="paquet zoom" alt="Paquet de chips de lentilles Vico"><span class="zoomhint">🔍 Agrandir</span></span><span>Chips de lentilles Vico, format familial 200 g</span></div>
     <p class="muted">Pour ce paquet de 200 g, indiquez un prix en euros pour chacune des questions suivantes.</p>
     <div class="q"><b>1. À partir de quel prix trouveriez-vous ce paquet <u>si bon marché</u> que vous douteriez de sa qualité ?</b>
       <div class="euro"><input type="number" inputmode="decimal" step="0.01" min="0" id="vw_trop_bon_marche"> €</div></div>
@@ -109,7 +121,7 @@ select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);borde
 
   <!-- 4b. Gabor-Granger : un écran par prix, toujours du plus cher au moins cher -->
   <section class="step card" data-step="gg">
-    <div class="mini"><img class="paquet" alt=""><span>Chips de lentilles Vico, format familial 200 g</span></div>
+    <div class="mini"><span class="zoomwrap"><img class="paquet zoom" alt="Paquet de chips de lentilles Vico"><span class="zoomhint">🔍 Agrandir</span></span><span>Chips de lentilles Vico, format familial 200 g</span></div>
     <h2>Achèteriez-vous ce paquet de 200 g à ce prix ?</h2>
     <div class="prix" id="ggPrix"></div>
     <div class="opts" id="ggOpts">
@@ -188,6 +200,8 @@ select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);borde
     <p class="muted">Vous pouvez fermer cette page.</p>
   </section>
 
+  <div id="lightbox" role="dialog" aria-label="Photo du paquet agrandie"><button type="button" aria-label="Fermer">×</button><img alt="Paquet de chips de lentilles Vico agrandi"></div>
+
   <section class="step card" data-step="horscible">
     <h1>Merci !</h1>
     <p>Ce questionnaire s'adresse aux personnes majeures qui achètent des chips ou des biscuits apéritifs au moins une fois par mois. Merci quand même pour votre temps !</p>
@@ -221,6 +235,13 @@ if (TEST && (url.get('v') === 'A' || url.get('v') === 'B')) version = url.get('v
 if (!version) { version = Math.random() < 0.5 ? 'A' : 'B'; }
 sessionStorage.setItem('version', version);
 document.querySelectorAll('img.paquet').forEach(i => i.src = IMAGES[version]);
+
+/* ================= Agrandissement de la photo ================= */
+const lb = document.getElementById('lightbox');
+lb.querySelector('img').src = IMAGES[version];
+document.querySelectorAll('img.zoom, .zoomhint').forEach(el => el.addEventListener('click', () => lb.classList.add('on')));
+lb.addEventListener('click', () => lb.classList.remove('on'));
+document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('on'); });
 if (TEST) document.getElementById('testBanner').style.display = 'block';
 
 /* ================= Données ================= */
@@ -237,7 +258,16 @@ function montrer(nom) {
   courant = nom;
   const i = Math.max(0, ordre.indexOf(nom));
   document.getElementById('prog').style.width = (nom === 'horscible' ? 100 : 100 * i / (ordre.length - 1)) + '%';
+  lb.classList.remove('on');
   window.scrollTo(0, 0);
+  if (nom === 'offre') attendre(document.getElementById('btnOffre'), 5);
+}
+// Le bouton de l'écran produit ne s'active qu'après quelques secondes, pour laisser le temps de regarder le paquet.
+function attendre(btn, s) {
+  const txt = btn.dataset.txt || (btn.dataset.txt = btn.textContent);
+  btn.disabled = true;
+  const tick = () => { if (s <= 0) { btn.disabled = false; btn.textContent = txt; return; } btn.textContent = `Prenez le temps de regarder… (${s} s)`; s--; setTimeout(tick, 1000); };
+  tick();
 }
 const val = name => (document.querySelector(`input[name="${name}"]:checked`) || {}).value;
 function erreur(section, msg) {
