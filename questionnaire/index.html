@@ -133,12 +133,9 @@ img.zoom{cursor:zoom-in}
     <h2>Achèteriez-vous ce paquet de chips de lentilles de 200 g à ce prix ?</h2>
     <div class="prix" id="ggPrix"></div>
     <div class="opts">
-      <label><input type="radio" name="gg" value="4"> Oui, certainement</label>
-      <label><input type="radio" name="gg" value="3"> Oui, probablement</label>
-      <label><input type="radio" name="gg" value="2"> Non, probablement pas</label>
-      <label><input type="radio" name="gg" value="1"> Non, certainement pas</label>
+      <label><input type="radio" name="gg" value="1"> Oui</label>
+      <label><input type="radio" name="gg" value="0"> Non</label>
     </div>
-    <p class="muted" id="ggPos" style="text-align:center;margin-top:10px"></p>
     <button class="btn" id="ggNext">Suivant</button>
   </section>
 
@@ -182,22 +179,21 @@ img.zoom{cursor:zoom-in}
       <div class="opts formats" id="formats"></div>
     </div>
     <div class="q">
-      <b>Avez-vous déjà goûté des chips de lentilles ?</b>
+      <b>À quelle fréquence achetez-vous des chips de lentilles ?</b>
       <div class="opts">
-        <label><input type="radio" name="lentilles_goute" value="jamais"> Jamais</label>
-        <label><input type="radio" name="lentilles_goute" value="une_fois"> Une fois</label>
-        <label><input type="radio" name="lentilles_goute" value="quelques_fois"> Quelques fois</label>
-        <label><input type="radio" name="lentilles_goute" value="souvent"> Souvent</label>
-        <label><input type="radio" name="lentilles_goute" value="tres_souvent"> Très souvent</label>
+        <label><input type="radio" name="achat_lentilles" value="jamais"> Jamais</label>
+        <label><input type="radio" name="achat_lentilles" value="une_fois"> Une fois</label>
+        <label><input type="radio" name="achat_lentilles" value="rarement"> Rarement</label>
+        <label><input type="radio" name="achat_lentilles" value="souvent"> Souvent</label>
       </div>
     </div>
     <button class="btn" data-next>Suivant</button>
   </section>
 
-  <!-- 8. Chips de lentilles (seulement si déjà goûtées) -->
+  <!-- 8. Chips de lentilles (sauté si la personne n'en achète jamais) -->
   <section class="step card" data-step="lentilles">
     <div class="q">
-      <b>De quelle(s) marque(s) étaient les chips de lentilles que vous avez goûtées ?</b>
+      <b>De quelle(s) marque(s) étaient les chips de lentilles que vous avez achetées ?</b>
       <span class="muted">Plusieurs réponses possibles.</span>
       <div class="opts">
         <label><input type="checkbox" name="marque" value="vico"> Vico</label>
@@ -216,16 +212,6 @@ img.zoom{cursor:zoom-in}
 
   <!-- 9. Habitudes (2) -->
   <section class="step card" data-step="habitudes2">
-    <div class="q">
-      <b>À quelle fréquence achetez-vous des chips de lentilles ?</b>
-      <div class="opts">
-        <label><input type="radio" name="achat_lentilles" value="jamais"> Jamais</label>
-        <label><input type="radio" name="achat_lentilles" value="moins_1_mois"> Moins d'une fois par mois</label>
-        <label><input type="radio" name="achat_lentilles" value="1_mois"> Environ une fois par mois</label>
-        <label><input type="radio" name="achat_lentilles" value="2-3_mois"> 2 à 3 fois par mois</label>
-        <label><input type="radio" name="achat_lentilles" value="semaine"> Au moins une fois par semaine</label>
-      </div>
-    </div>
     <div class="q">
       <b>Si vous achetiez un paquet de chips de lentilles de 200 g, en combien de fois le finiriez-vous ?</b>
       <div class="opts">
@@ -305,7 +291,7 @@ const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzz6syBDH2Jne6uU5eEMyr
 const IMAGE = 'paquet-B.jpg';                                   // photo officielle du sachet (vico.fr)
 const PRIX_85 = 2.69;                                           // identique dans les 3 versions (31,65 €/kg)
 const PRIX_200 = { A: 6.33, B: 5.49, C: 4.99 };                 // seule différence entre les versions
-const PRIX_GG = [6.49, 5.99, 5.49, 4.99, 4.49, 3.99, 3.49];     // ordre fixe : du plus cher au moins cher
+const PRIX_GG = [3.49, 3.99, 4.49, 4.99, 5.49, 5.99, 6.49];     // ordre fixe : du moins cher au plus cher ; arrêt au premier « Non »
 const FORMATS = [
   ['petit', 'Petit sachet', 'moins de 100 g', 22],
   ['classique', 'Sachet classique', '100 à 150 g', 34],
@@ -338,11 +324,11 @@ const REGIONS = ['Auvergne-Rhône-Alpes', 'Bourgogne-Franche-Comté', 'Bretagne'
 
 // Colonnes enregistrées : toujours les mêmes, dans le même ordre.
 const COLONNES = ['id', 'date', 'version', 'prix_200g', 'statut', 'duree_s', 'q1_frequence', 'age',
-  ...PRIX_GG.map(p => 'gg_' + p.toFixed(2).replace('.', '_')),
-  'choix_format', 'controle', 'format_habituel', 'lentilles_goute',
+  ...PRIX_GG.map(p => 'gg_' + p.toFixed(2).replace('.', '_')), 'gg_prix_max',
+  'choix_format', 'controle', 'format_habituel', 'achat_lentilles',
   'marque_vico', ...AUTRES_MARQUES.map(m => m[0]), 'marque_autre', 'marque_autre_nom', 'marque_nsp',
   ...CONTEXTES.map(c => c[0]), 'ctx_autre', 'ctx_autre_txt',
-  'achat_lentilles', 'finir_200g',
+  'finir_200g',
   ...ENSEIGNES.map(e => e[0]),
   'genre', 'statut_pro', 'foyer', 'enfants', 'courses', 'region'];
 
@@ -457,9 +443,9 @@ document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
     return montrer('habitudes1');
   }
   if (courant === 'habitudes1') {
-    rep.format_habituel = val('format_habituel'); rep.lentilles_goute = val('lentilles_goute');
-    if (!rep.format_habituel || !rep.lentilles_goute) return erreur(s, 'Merci de répondre aux deux questions.');
-    return montrer(rep.lentilles_goute === 'jamais' ? 'habitudes2' : 'lentilles');
+    rep.format_habituel = val('format_habituel'); rep.achat_lentilles = val('achat_lentilles');
+    if (!rep.format_habituel || !rep.achat_lentilles) return erreur(s, 'Merci de répondre aux deux questions.');
+    return montrer(rep.achat_lentilles === 'jamais' ? 'habitudes2' : 'lentilles');   // « Jamais » : on saute marques et occasions
   }
   if (courant === 'lentilles') {
     const m = coches('marque'), am = m.includes('autres') ? coches('autre_marque') : [], c = coches('ctx');
@@ -478,8 +464,8 @@ document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
     return montrer('habitudes2');
   }
   if (courant === 'habitudes2') {
-    rep.achat_lentilles = val('achat_lentilles'); rep.finir_200g = val('finir_200g');
-    if (!rep.achat_lentilles || !rep.finir_200g) return erreur(s, 'Merci de répondre aux deux questions.');
+    rep.finir_200g = val('finir_200g');
+    if (!rep.finir_200g) return erreur(s, 'Merci de choisir une réponse.');
     return montrer('enseignes');
   }
   if (courant === 'enseignes') {
@@ -498,15 +484,17 @@ document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
 let ggIndex = 0;
 function afficherGG() {
   document.getElementById('ggPrix').textContent = euro(PRIX_GG[ggIndex]);
-  document.getElementById('ggPos').textContent = `Prix ${ggIndex + 1} sur ${PRIX_GG.length}`;
   document.querySelectorAll('input[name="gg"]').forEach(i => i.checked = false);
   erreur(document.querySelector('[data-step="gg"]'), '');
 }
 document.getElementById('ggNext').onclick = () => {
   const v = val('gg'); if (!v) return erreur(document.querySelector('[data-step="gg"]'), 'Merci de choisir une réponse.');
   rep['gg_' + PRIX_GG[ggIndex].toFixed(2).replace('.', '_')] = +v;
+  if (v === '1') rep.gg_prix_max = PRIX_GG[ggIndex];            // prix le plus élevé accepté
   ggIndex++;
-  if (ggIndex < PRIX_GG.length) { afficherGG(); window.scrollTo(0, 0); } else montrer('abc');
+  // Au premier « Non », on arrête : les prix plus élevés ne sont pas posés (colonnes laissées vides)
+  if (v === '1' && ggIndex < PRIX_GG.length) { afficherGG(); window.scrollTo(0, 0); }
+  else { if (rep.gg_prix_max === '') rep.gg_prix_max = 0; montrer('abc'); }
 };
 
 /* ================= Enregistrement ================= */
