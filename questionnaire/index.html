@@ -23,58 +23,57 @@ p{margin:0 0 12px} .muted{color:var(--muted);font-size:14px}
 .opts input[type=text]{width:auto;height:auto;flex:1;min-width:0;font:inherit;padding:6px 8px;border:1.5px solid var(--line);border-radius:8px}
 .q{margin-bottom:24px} .q > b{display:block;margin-bottom:6px}
 .q > .muted{display:block;margin:-2px 0 6px}
-.euro{display:flex;align-items:center;gap:8px;margin:8px 0 18px}
-.euro input,.age input{font:inherit;font-size:20px;width:130px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px}
-.euro input:focus,.age input:focus{outline:none;border-color:var(--accent)}
 .age{display:flex;align-items:center;gap:8px;margin-top:6px}
+.age input{font:inherit;font-size:20px;width:130px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px}
+.age input:focus{outline:none;border-color:var(--accent)}
 select{font:inherit;width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:#fff}
 .btn{display:block;width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:var(--accent);color:#fff;font:600 17px system-ui;cursor:pointer}
 .btn:disabled{background:#b9c9ba;cursor:not-allowed}
 .err{color:var(--warn);font-size:14px;margin-top:8px;display:none}
+.sujet{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:13px;letter-spacing:.03em;text-transform:uppercase;padding:3px 10px;border-radius:999px;margin-bottom:10px}
 .offre{display:flex;flex-direction:column;align-items:center;text-align:center}
 .offre img{width:min(270px,75%);height:auto;margin:6px 0 14px}
 .mini{display:flex;gap:12px;align-items:center;margin-bottom:16px;padding:10px;background:var(--bg);border-radius:12px}
 .mini img{width:62px;height:auto;flex:none}
 .mini span{font-size:14px;color:var(--muted)}
+.mini .zoomwrap{display:flex;flex-direction:column;align-items:center;flex:none}
 .prix{font-size:40px;font-weight:800;text-align:center;margin:6px 0 4px;letter-spacing:-.02em}
 .consent{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:12px;background:var(--bg);margin-top:8px}
 .test{background:#fff3cd;color:#7a5600;font-size:13px;padding:6px 10px;border-radius:8px;margin-bottom:10px;display:none}
 .consigne{background:#fff3cd;border:2px solid #f0b400;color:#5c4300;border-radius:12px;padding:12px 14px;font-size:18px;font-weight:700;text-align:center;margin:0 0 14px;line-height:1.35}
 .consigne small{display:block;font-size:14px;font-weight:500;margin-top:4px}
-/* Formats illustrés */
+/* Le rayon : deux sachets avec leur étiquette de prix */
+.rayon{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 4px}
+.rayon label{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;padding:12px 8px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;text-align:center}
+.rayon label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.rayon img{height:auto;display:block}
+.rayon .p85 img{width:58%}
+.rayon .p200 img{width:92%}
+.rayon .nom{font-weight:700;font-size:15px;line-height:1.25}
+.etiquette{width:100%;background:#fffbe6;border:2px solid #f0b400;border-radius:8px;padding:6px 4px;line-height:1.2}
+.etiquette .pv{display:block;font-size:26px;font-weight:800;letter-spacing:-.02em}
+.etiquette .pk{display:block;font-size:13px;color:#5c4300;font-weight:600;margin-top:2px}
+.rayon input{accent-color:var(--accent);width:20px;height:20px}
+/* Formats illustrés avec le vrai sachet */
 .formats label{align-items:center}
-.formats svg{flex:none;width:56px;height:56px}
-/* Choix 85 g / 200 g */
-.choix label{flex-direction:column;align-items:flex-start;gap:2px}
-.choix label .l1{display:flex;gap:10px;align-items:center;font-weight:600}
-.choix label .l2{font-size:14px;color:var(--muted);padding-left:28px}
+.formats .vis{flex:none;width:58px;height:62px;display:flex;align-items:flex-end;justify-content:center}
+.formats .vis img{height:auto;display:block}
 /* Liste des autres marques */
 .sousliste{display:none;flex-direction:column;gap:6px;margin:-2px 0 2px 28px}
 .sousliste.on{display:flex}
 .sousliste label{padding:9px 12px;font-size:15px}
 .fleche{margin-left:auto;color:var(--muted)}
-/* Choix 85 g / 200 g illustré */
-.duo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
-.duo label{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;gap:6px;padding:12px 8px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer}
-.duo label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
-.duo img{height:auto;display:block}
-.duo .p85 img{width:60%}
-.duo .p200 img{width:92%}
-.duo b{font-size:15px} .duo .kg{font-size:13px;color:var(--muted)}
-.duo input{accent-color:var(--accent);width:18px;height:18px}
 /* Tableau des enseignes */
 .tab-ens{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:8px}
 .tab-ens th{font-size:10px;font-weight:600;color:var(--muted);padding:4px 0 8px;line-height:1.15;vertical-align:bottom;text-align:center;letter-spacing:-.1px}
 .tab-ens th:first-child{width:27%}
-.tab-ens td:first-child{font-size:13px;padding-right:4px}
 .tab-ens td{text-align:center;padding:10px 0;border-top:1px solid var(--line)}
-.tab-ens td:first-child{text-align:left;font-weight:600;font-size:14.5px}
+.tab-ens td:first-child{text-align:left;font-weight:600;font-size:13px;padding-right:4px}
 .tab-ens input{accent-color:var(--accent);width:22px;height:22px;cursor:pointer;margin:0}
 .tab-ens tr:has(input:checked) td:first-child{color:var(--accent)}
 /* Agrandissement de la photo */
 img.zoom{cursor:zoom-in}
 .zoomhint{display:inline-block;font-size:13px;color:var(--accent);font-weight:600;cursor:zoom-in;margin-top:2px}
-.mini .zoomwrap{display:flex;flex-direction:column;align-items:center;flex:none}
 #lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:50;padding:16px;cursor:zoom-out}
 #lightbox.on{display:flex}
 #lightbox img{max-width:100%;max-height:88vh;height:auto;border-radius:8px;background:#fff}
@@ -88,8 +87,9 @@ img.zoom{cursor:zoom-in}
 
   <!-- 1. Accueil -->
   <section class="step card" data-step="accueil">
-    <h1>Votre avis sur un paquet de chips</h1>
-    <p>Bonjour ! Ce questionnaire est réalisé par des étudiants en Master 1 Marketing à l'IAE Clermont Auvergne, dans le cadre d'un projet de cours sur le prix d'un produit alimentaire.</p>
+    <span class="sujet">Chips de lentilles</span>
+    <h1>Votre avis sur les chips de lentilles</h1>
+    <p>Bonjour ! Ce questionnaire est réalisé par des étudiants en Master 1 Marketing à l'IAE Clermont Auvergne, dans le cadre d'un projet de cours sur le prix des <b>chips de lentilles</b>.</p>
     <p>Il dure environ <b>3 minutes</b>. Il n'y a pas de bonne ou de mauvaise réponse : seul votre avis compte.</p>
     <p class="muted">Le questionnaire est <b>anonyme</b> : aucun nom, adresse e-mail ou adresse IP n'est enregistré. Les réponses servent uniquement à ce travail universitaire et ne sont pas transmises à des tiers.</p>
     <label class="consent"><input type="checkbox" id="consent"> <span>J'ai compris et j'accepte de participer.</span></label>
@@ -115,36 +115,22 @@ img.zoom{cursor:zoom-in}
     <button class="btn" data-next>Suivant</button>
   </section>
 
-  <!-- 3. L'offre (version A ou B : seule l'image change) -->
-  <section class="step card" data-step="offre">
+  <!-- 3. Le produit : grand format 200 g, sans prix (identique pour tout le monde) -->
+  <section class="step card" data-step="produit">
+    <span class="sujet">Chips de lentilles</span>
     <h2>Voici un nouveau produit</h2>
-    <div class="consigne">👀 Regardez bien le paquet, en détail.<small>Les questions suivantes portent sur ce produit. Touchez la photo pour l'agrandir.</small></div>
+    <div class="consigne">👀 Regardez bien le paquet, en détail.<small>Les questions suivantes portent sur ces chips de lentilles. Touchez la photo pour l'agrandir.</small></div>
     <div class="offre">
       <img class="paquet zoom" alt="Paquet de chips de lentilles Vico Natur'&Bon saveur fines herbes">
       <p><b>Chips de lentilles Vico Natur'&amp;Bon, saveur fines herbes</b><br>Nouveau <b>grand format de 200 g</b> (environ 8 portions de 25 g).<br>Vendu en grande surface, au rayon apéritif.</p>
     </div>
-    <button class="btn" data-next id="btnOffre">J'ai bien regardé le produit</button>
+    <button class="btn" data-next id="btnProduit">J'ai bien regardé le produit</button>
   </section>
 
-  <!-- 4a. Van Westendorp -->
-  <section class="step card" data-step="vw">
-    <div class="mini"><span class="zoomwrap"><img class="paquet zoom" alt="Paquet de chips de lentilles Vico"><span class="zoomhint">🔍 Agrandir</span></span><span>Chips de lentilles Vico, grand format 200 g</span></div>
-    <p class="muted">Pour ce paquet de 200 g, indiquez un prix en euros pour chacune des questions suivantes.</p>
-    <div class="q"><b>1. À partir de quel prix trouveriez-vous ce paquet <u>si bon marché</u> que vous douteriez de sa qualité ?</b>
-      <div class="euro"><input type="number" inputmode="decimal" step="0.01" min="0" id="vw_trop_bon_marche"> €</div></div>
-    <div class="q"><b>2. À quel prix le trouveriez-vous <u>bon marché</u>, c'est-à-dire une bonne affaire ?</b>
-      <div class="euro"><input type="number" inputmode="decimal" step="0.01" min="0" id="vw_bon_marche"> €</div></div>
-    <div class="q"><b>3. À quel prix commenceriez-vous à le trouver <u>cher</u>, tout en envisageant quand même de l'acheter ?</b>
-      <div class="euro"><input type="number" inputmode="decimal" step="0.01" min="0" id="vw_cher"> €</div></div>
-    <div class="q"><b>4. À partir de quel prix le trouveriez-vous <u>trop cher</u> pour l'acheter ?</b>
-      <div class="euro"><input type="number" inputmode="decimal" step="0.01" min="0" id="vw_trop_cher"> €</div></div>
-    <button class="btn" data-next>Suivant</button>
-  </section>
-
-  <!-- 4b. Gabor-Granger : un écran par prix, toujours du plus cher au moins cher -->
+  <!-- 4. Gabor-Granger : un écran par prix, toujours du plus cher au moins cher -->
   <section class="step card" data-step="gg">
-    <div class="mini"><span class="zoomwrap"><img class="paquet zoom" alt="Paquet de chips de lentilles Vico"><span class="zoomhint">🔍 Agrandir</span></span><span>Chips de lentilles Vico, grand format 200 g</span></div>
-    <h2>Achèteriez-vous ce paquet de 200 g à ce prix ?</h2>
+    <div class="mini"><span class="zoomwrap"><img class="paquet zoom" alt="Paquet de chips de lentilles Vico"><span class="zoomhint">🔍 Agrandir</span></span><span>Chips de <b>lentilles</b> Vico, grand format 200 g</span></div>
+    <h2>Achèteriez-vous ce paquet de chips de lentilles de 200 g à ce prix ?</h2>
     <div class="prix" id="ggPrix"></div>
     <div class="opts">
       <label><input type="radio" name="gg" value="4"> Oui, certainement</label>
@@ -156,26 +142,43 @@ img.zoom{cursor:zoom-in}
     <button class="btn" id="ggNext">Suivant</button>
   </section>
 
-  <!-- 5. Contrôle (pas de photo sur cet écran) -->
-  <section class="step card" data-step="controle">
+  <!-- 5. Test A/B/C : les deux sachets en rayon, seul le prix du 200 g change selon la version -->
+  <section class="step card" data-step="abc">
+    <span class="sujet">Chips de lentilles</span>
+    <h2>En rayon, vous trouvez ces deux paquets de chips de lentilles Vico.</h2>
+    <p class="muted">Regardez bien les prix sur les étiquettes.</p>
     <div class="q">
-      <b>Sur le paquet que vous avez vu, y avait-il une mention sur les matières grasses ?</b>
-      <div class="opts">
-        <label><input type="radio" name="controle" value="5"> Oui</label>
-        <label><input type="radio" name="controle" value="4"> Probablement</label>
-        <label><input type="radio" name="controle" value="3"> Je ne sais pas</label>
-        <label><input type="radio" name="controle" value="2"> Probablement pas</label>
-        <label><input type="radio" name="controle" value="1"> Non</label>
+      <b>Si vous deviez acheter des chips de lentilles Vico, lequel de ces deux paquets choisiriez-vous ?</b>
+      <div class="rayon">
+        <label class="p85"><img class="paquet" alt="Sachet de chips de lentilles Vico 85 g"><span class="nom">Sachet<br>85 g</span>
+          <span class="etiquette"><span class="pv" id="pv85"></span><span class="pk" id="pk85"></span></span>
+          <input type="radio" name="choix_format" value="85g" aria-label="Sachet de 85 g"></label>
+        <label class="p200"><img class="paquet" alt="Grand format de chips de lentilles Vico 200 g"><span class="nom">Grand format<br>200 g</span>
+          <span class="etiquette"><span class="pv" id="pv200"></span><span class="pk" id="pk200"></span></span>
+          <input type="radio" name="choix_format" value="200g" aria-label="Grand format de 200 g"></label>
       </div>
     </div>
     <button class="btn" data-next>Suivant</button>
   </section>
 
-  <!-- 6. Habitudes (1) -->
+  <!-- 6. Contrôle : l'écart de prix au kilo a-t-il été vu ? (pas de photo ni de prix sur cet écran) -->
+  <section class="step card" data-step="controle">
+    <div class="q">
+      <b>Sur les étiquettes que vous venez de voir, le grand format de 200 g était-il moins cher au kilo que le sachet de 85 g ?</b>
+      <div class="opts">
+        <label><input type="radio" name="controle" value="oui"> Oui</label>
+        <label><input type="radio" name="controle" value="non"> Non</label>
+        <label><input type="radio" name="controle" value="ne_sait_pas"> Je ne sais pas</label>
+      </div>
+    </div>
+    <button class="btn" data-next>Suivant</button>
+  </section>
+
+  <!-- 7. Habitudes (1) -->
   <section class="step card" data-step="habitudes1">
     <p class="muted">Quelques questions sur vos habitudes.</p>
     <div class="q">
-      <b>Quand vous achetez des chips, quel format prenez-vous le plus souvent ?</b>
+      <b>Quand vous achetez des chips (de lentilles ou classiques), quel format prenez-vous le plus souvent ?</b>
       <div class="opts formats" id="formats"></div>
     </div>
     <div class="q">
@@ -191,7 +194,7 @@ img.zoom{cursor:zoom-in}
     <button class="btn" data-next>Suivant</button>
   </section>
 
-  <!-- 7. Chips de lentilles (seulement si déjà goûtées) -->
+  <!-- 8. Chips de lentilles (seulement si déjà goûtées) -->
   <section class="step card" data-step="lentilles">
     <div class="q">
       <b>De quelle(s) marque(s) étaient les chips de lentilles que vous avez goûtées ?</b>
@@ -211,7 +214,7 @@ img.zoom{cursor:zoom-in}
     <button class="btn" data-next>Suivant</button>
   </section>
 
-  <!-- 8. Habitudes (2) -->
+  <!-- 9. Habitudes (2) -->
   <section class="step card" data-step="habitudes2">
     <div class="q">
       <b>À quelle fréquence achetez-vous des chips de lentilles ?</b>
@@ -224,7 +227,7 @@ img.zoom{cursor:zoom-in}
       </div>
     </div>
     <div class="q">
-      <b>Si vous achetiez un paquet de chips de 200 g, en combien de fois le finiriez-vous ?</b>
+      <b>Si vous achetiez un paquet de chips de lentilles de 200 g, en combien de fois le finiriez-vous ?</b>
       <div class="opts">
         <label><input type="radio" name="finir_200g" value="1_fois"> En une seule fois</label>
         <label><input type="radio" name="finir_200g" value="2-3_fois"> En 2 ou 3 fois</label>
@@ -232,29 +235,19 @@ img.zoom{cursor:zoom-in}
         <label><input type="radio" name="finir_200g" value="pas_fini"> Je ne le finirais probablement pas</label>
       </div>
     </div>
-    <div class="q">
-      <b>Entre ces deux paquets de chips de lentilles Vico, lequel choisiriez-vous ?</b>
-      <div class="duo">
-        <label class="p85"><img class="paquet" alt="Sachet de 85 g"><b>Sachet<br>85 g – 2,69 €</b><span class="kg">soit 31,65 € le kilo</span><input type="radio" name="choix_format" value="85g"></label>
-        <label class="p200"><img class="paquet" alt="Grand format de 200 g"><b>Grand format<br>200 g – 4,99 €</b><span class="kg">soit 24,95 € le kilo</span><input type="radio" name="choix_format" value="200g"></label>
-      </div>
-      <div class="opts">
-        <label><input type="radio" name="choix_format" value="aucun"> Aucun des deux</label>
-      </div>
-    </div>
     <button class="btn" data-next>Suivant</button>
   </section>
 
-  <!-- 9. Enseignes -->
+  <!-- 10. Enseignes -->
   <section class="step card" data-step="enseignes">
-    <div class="q grille">
+    <div class="q">
       <b>À quelle fréquence faites-vous vos courses dans chacune de ces enseignes ?</b>
       <div id="grille"></div>
     </div>
     <button class="btn" data-next>Suivant</button>
   </section>
 
-  <!-- 10. Profil -->
+  <!-- 11. Profil -->
   <section class="step card" data-step="profil">
     <p class="muted">Pour finir, quelques questions pour mieux connaître les personnes qui ont répondu.</p>
     <div class="q"><b>Vous êtes :</b>
@@ -309,12 +302,14 @@ img.zoom{cursor:zoom-in}
 /* ================= Réglages ================= */
 // Adresse du script Google Apps Script qui enregistre les réponses dans Google Sheets.
 const ENDPOINT = 'https://script.google.com/macros/s/AKfycbzz6syBDH2Jne6uU5eEMyrdvS8pq78MWjCMM709gKWsaAfuWMH4q-8GY1rikts7xJcY/exec';
-const PRIX_GG = [4.99, 4.49, 3.99, 3.49, 2.99];   // ordre fixe : du plus cher au moins cher
-const IMAGES = { A: 'paquet-A.jpg', B: 'paquet-B.jpg' };       // A : sans mention santé ; B : avec « -40 % de matières grasses »
+const IMAGE = 'paquet-B.jpg';                                   // photo officielle du sachet (vico.fr)
+const PRIX_85 = 2.69;                                           // identique dans les 3 versions (31,65 €/kg)
+const PRIX_200 = { A: 6.33, B: 5.49, C: 4.99 };                 // seule différence entre les versions
+const PRIX_GG = [6.49, 5.99, 5.49, 4.99, 4.49, 3.99, 3.49];     // ordre fixe : du plus cher au moins cher
 const FORMATS = [
-  ['petit', 'Petit sachet', 'moins de 100 g', 0.55],
-  ['classique', 'Sachet classique', '100 à 150 g', 0.78],
-  ['grand', 'Grand format', '200 g et plus', 1],
+  ['petit', 'Petit sachet', 'moins de 100 g', 22],
+  ['classique', 'Sachet classique', '100 à 150 g', 34],
+  ['grand', 'Grand format', '200 g et plus', 48],
   ['depend', 'Cela dépend des occasions', '', 0]
 ];
 const CONTEXTES = [
@@ -327,12 +322,12 @@ const CONTEXTES = [
   ['ctx_repas', "En accompagnement d'un repas"]
 ];
 const ENSEIGNES = [['ens_carrefour', 'Carrefour'], ['ens_auchan', 'Auchan'], ['ens_leclerc', 'E.Leclerc'], ['ens_intermarche', 'Intermarché']];
-// Autres marques de chips de lentilles proposées quand on coche « Une autre marque »
+const ECHELLE_ENS = ['Jamais', 'Rarement', 'Parfois', 'Souvent', 'Très<br>souvent'];
+// Autres marques de chips de lentilles proposées quand on coche « Une ou d'autres marques »
 const AUTRES_MARQUES = [
   ['marque_jardin_bio', 'Jardin Bio Étic'], ['marque_bjorg', 'Bjorg'], ['marque_aline_olivier', 'Aline & Olivier'],
   ['marque_mdd', 'Marque du magasin (Carrefour, Auchan, Leclerc…)']
 ];
-const ECHELLE_ENS = ['Jamais', 'Rarement', 'Parfois', 'Souvent', 'Très<br>souvent'];
 const STATUTS = [
   ['etudiant', 'Étudiant(e)'], ['employe', 'Employé(e)'], ['ouvrier', 'Ouvrier(ère)'],
   ['cadre', 'Cadre ou profession intellectuelle supérieure'], ['intermediaire', 'Profession intermédiaire (technicien, agent de maîtrise…)'],
@@ -342,59 +337,61 @@ const STATUTS = [
 const REGIONS = ['Auvergne-Rhône-Alpes', 'Bourgogne-Franche-Comté', 'Bretagne', 'Centre-Val de Loire', 'Corse', 'Grand Est', 'Hauts-de-France', 'Île-de-France', 'Normandie', 'Nouvelle-Aquitaine', 'Occitanie', 'Pays de la Loire', "Provence-Alpes-Côte d'Azur", 'Outre-mer', 'Hors de France'];
 
 // Colonnes enregistrées : toujours les mêmes, dans le même ordre.
-const COLONNES = ['id', 'date', 'version', 'statut', 'duree_s', 'q1_frequence', 'age',
-  'vw_trop_bon_marche', 'vw_bon_marche', 'vw_cher', 'vw_trop_cher', 'vw_coherent',
+const COLONNES = ['id', 'date', 'version', 'prix_200g', 'statut', 'duree_s', 'q1_frequence', 'age',
   ...PRIX_GG.map(p => 'gg_' + p.toFixed(2).replace('.', '_')),
-  'controle', 'format_habituel', 'lentilles_goute',
+  'choix_format', 'controle', 'format_habituel', 'lentilles_goute',
   'marque_vico', ...AUTRES_MARQUES.map(m => m[0]), 'marque_autre', 'marque_autre_nom', 'marque_nsp',
   ...CONTEXTES.map(c => c[0]), 'ctx_autre', 'ctx_autre_txt',
-  'achat_lentilles', 'finir_200g', 'choix_format',
+  'achat_lentilles', 'finir_200g',
   ...ENSEIGNES.map(e => e[0]),
   'genre', 'statut_pro', 'foyer', 'enfants', 'courses', 'region'];
 
-/* ================= Tirage au sort ================= */
+/* ================= Tirage au sort : A, B ou C (un tiers de chances chacune) ================= */
 const url = new URLSearchParams(location.search);
 const TEST = url.has('test');
-let version = sessionStorage.getItem('version');
-if (TEST && (url.get('v') === 'A' || url.get('v') === 'B')) version = url.get('v');   // en mode test seulement : forcer une version
-if (!version) { version = Math.random() < 0.5 ? 'A' : 'B'; }
-sessionStorage.setItem('version', version);
-document.querySelectorAll('img.paquet').forEach(i => i.src = IMAGES[version]);
+let version = sessionStorage.getItem('version_abc');
+if (TEST && ['A', 'B', 'C'].includes(url.get('v'))) version = url.get('v');   // en mode test seulement : forcer une version
+if (!['A', 'B', 'C'].includes(version)) version = ['A', 'B', 'C'][Math.floor(Math.random() * 3)];
+sessionStorage.setItem('version_abc', version);
 if (TEST) document.getElementById('testBanner').style.display = 'block';
+
+const euro = x => x.toFixed(2).replace('.', ',') + ' €';
+const prix200 = PRIX_200[version];
+document.querySelectorAll('img.paquet').forEach(i => i.src = IMAGE);
+document.getElementById('pv85').textContent = euro(PRIX_85);
+document.getElementById('pk85').textContent = 'soit ' + euro(PRIX_85 / 0.085) + ' le kg';
+document.getElementById('pv200').textContent = euro(prix200);
+document.getElementById('pk200').textContent = 'soit ' + euro(prix200 / 0.2) + ' le kg';
 
 /* ================= Agrandissement de la photo ================= */
 const lb = document.getElementById('lightbox');
-lb.querySelector('img').src = IMAGES[version];
+lb.querySelector('img').src = IMAGE;
 document.querySelectorAll('img.zoom, .zoomhint').forEach(el => el.addEventListener('click', () => lb.classList.add('on')));
 lb.addEventListener('click', () => lb.classList.remove('on'));
 document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('on'); });
 
 /* ================= Construction des questions répétitives ================= */
-const sachet = h => h ? `<svg viewBox="0 0 56 56" aria-hidden="true"><g transform="translate(28 ${56 - 2}) scale(${h}) translate(-18 -50)">
-  <path d="M4 4 L32 4 L34 10 L33 44 L35 50 L1 50 L3 44 L2 10 Z" fill="#e8f3e8" stroke="#2f7d32" stroke-width="2.2" stroke-linejoin="round"/>
-  <path d="M4 10 H32 M3 44 H33" stroke="#2f7d32" stroke-width="1.6"/><ellipse cx="18" cy="27" rx="8" ry="6" fill="#f0b400" opacity=".8"/></g></svg>`
-  : `<svg viewBox="0 0 56 56" aria-hidden="true"><text x="28" y="36" text-anchor="middle" font-size="26" fill="#6e6e73">?</text></svg>`;
-document.getElementById('formats').innerHTML = FORMATS.map(([v, t, s, h]) =>
-  `<label><input type="radio" name="format_habituel" value="${v}">${sachet(h)}<span><b>${t}</b>${s ? '<br><span class="muted">' + s + '</span>' : ''}</span></label>`).join('');
+document.getElementById('formats').innerHTML = FORMATS.map(([v, t, s, w]) =>
+  `<label><input type="radio" name="format_habituel" value="${v}"><span class="vis">${w ? `<img src="${IMAGE}" alt="" style="width:${w}px">` : '<span style="font-size:26px;color:#6e6e73">?</span>'}</span><span><b>${t}</b>${s ? '<br><span class="muted">' + s + '</span>' : ''}</span></label>`).join('');
 document.getElementById('contextes').innerHTML = CONTEXTES.map(([n, t]) => `<label><input type="checkbox" name="ctx" value="${n}"> ${t}</label>`).join('') +
   `<label><input type="checkbox" name="ctx" value="ctx_autre" id="ctxAutre"> Autre : <input type="text" id="ctxAutreTxt" placeholder="précisez"></label>`;
 document.getElementById('grille').innerHTML = `<table class="tab-ens"><thead><tr><th></th>${ECHELLE_ENS.map(e => `<th>${e}</th>`).join('')}</tr></thead><tbody>` +
   ENSEIGNES.map(([n, t]) => `<tr><td>${t}</td>${ECHELLE_ENS.map((e, k) => `<td><input type="radio" name="${n}" value="${k + 1}" aria-label="${t} : ${e.replace('<br>', ' ')}"></td>`).join('')}</tr>`).join('') +
   '</tbody></table>';
-// Liste des autres marques, affichée quand on coche « Une ou d'autres marques »
 document.getElementById('sousMarques').innerHTML = AUTRES_MARQUES.map(([n, t]) => `<label><input type="checkbox" name="autre_marque" value="${n}"> ${t}</label>`).join('') +
   `<label><input type="checkbox" name="autre_marque" value="marque_autre" id="marqueAutre"> Autre : <input type="text" id="marqueAutreNom" placeholder="laquelle ?"></label>`;
+document.getElementById('statuts').innerHTML = STATUTS.map(([v, t]) => `<label><input type="radio" name="statut_pro" value="${v}"> ${t}</label>`).join('');
+document.getElementById('region').innerHTML += REGIONS.map(r => `<option>${r}</option>`).join('');
+
+// Marques : la liste s'ouvre avec « Une ou d'autres marques » ; « Je ne sais pas » exclut le reste, et inversement
 const cbAutres = document.getElementById('marqueAutres'), cbNsp = document.getElementById('marqueNsp'), sous = document.getElementById('sousMarques');
 cbAutres.addEventListener('change', () => sous.classList.toggle('on', cbAutres.checked));
-// « Je ne sais pas » exclut les autres réponses, et inversement
 document.querySelectorAll('input[name="marque"], input[name="autre_marque"]').forEach(cb => cb.addEventListener('change', () => {
   if (cb === cbNsp && cbNsp.checked) {
     document.querySelectorAll('input[name="marque"], input[name="autre_marque"]').forEach(x => { if (x !== cbNsp) x.checked = false; });
     document.getElementById('marqueAutreNom').value = ''; sous.classList.remove('on');
   } else if (cb !== cbNsp && cb.checked) cbNsp.checked = false;
 }));
-document.getElementById('statuts').innerHTML = STATUTS.map(([v, t]) => `<label><input type="radio" name="statut_pro" value="${v}"> ${t}</label>`).join('');
-document.getElementById('region').innerHTML += REGIONS.map(r => `<option>${r}</option>`).join('');
 // Écrire dans un champ « Autre » coche automatiquement la case
 [['marqueAutreNom', 'marqueAutre'], ['ctxAutreTxt', 'ctxAutre']].forEach(([t, c]) =>
   document.getElementById(t).addEventListener('input', e => { if (e.target.value.trim()) { document.getElementById(c).checked = true; if (c === 'marqueAutre') cbNsp.checked = false; } }));
@@ -403,10 +400,11 @@ document.getElementById('region').innerHTML += REGIONS.map(r => `<option>${r}</o
 const rep = Object.fromEntries(COLONNES.map(c => [c, '']));
 rep.id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()).slice(0, 8);
 rep.version = version;
+rep.prix_200g = prix200;
 const t0 = Date.now();
 
 /* ================= Navigation ================= */
-const ordre = ['accueil', 'filtre', 'offre', 'vw', 'gg', 'controle', 'habitudes1', 'lentilles', 'habitudes2', 'enseignes', 'profil', 'fin'];
+const ordre = ['accueil', 'filtre', 'produit', 'gg', 'abc', 'controle', 'habitudes1', 'lentilles', 'habitudes2', 'enseignes', 'profil', 'fin'];
 let courant = 'accueil';
 function montrer(nom) {
   document.querySelectorAll('.step').forEach(s => s.classList.toggle('on', s.dataset.step === nom));
@@ -415,7 +413,7 @@ function montrer(nom) {
   document.getElementById('prog').style.width = (nom === 'horscible' ? 100 : 100 * i / (ordre.length - 1)) + '%';
   lb.classList.remove('on');
   window.scrollTo(0, 0);
-  if (nom === 'offre') attendre(document.getElementById('btnOffre'), 5);
+  if (nom === 'produit') attendre(document.getElementById('btnProduit'), 5);
 }
 // Le bouton de l'écran produit ne s'active qu'après quelques secondes, pour laisser le temps de regarder le paquet.
 function attendre(btn, s) {
@@ -437,7 +435,6 @@ function erreur(section, msg) {
 document.getElementById('consent').onchange = e => document.getElementById('go').disabled = !e.target.checked;
 document.getElementById('go').onclick = () => montrer('filtre');
 
-let vwAverti = false;
 document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
   const s = b.closest('.step');
   erreur(s, '');
@@ -448,17 +445,12 @@ document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
     if (!/^\d{1,2}$/.test(a) || +a < 10) return erreur(s, 'Merci d\'indiquer votre âge en chiffres (par exemple 24).');
     rep.age = +a;
     if (rep.age < 18 || rep.q1_frequence === 'jamais') { rep.statut = 'hors_cible'; envoyer(); return montrer('horscible'); }
-    return montrer('offre');
+    return montrer('produit');
   }
-  if (courant === 'offre') return montrer('vw');
-  if (courant === 'vw') {
-    const ids = ['vw_trop_bon_marche', 'vw_bon_marche', 'vw_cher', 'vw_trop_cher'];
-    const v = ids.map(i => parseFloat(String(document.getElementById(i).value).replace(',', '.')));
-    if (v.some(x => isNaN(x) || x < 0)) return erreur(s, 'Merci d\'indiquer un prix pour chacune des 4 questions.');
-    const croissant = v.every((x, i) => i === 0 || x >= v[i - 1]);
-    if (!croissant && !vwAverti) { vwAverti = true; return erreur(s, 'Vérifiez vos réponses : en principe, les prix augmentent de la question 1 à la question 4. Corrigez si besoin, ou cliquez à nouveau sur « Suivant » pour garder vos réponses.'); }
-    ids.forEach((i, k) => rep[i] = v[k]); rep.vw_coherent = croissant ? 1 : 0;
-    ggIndex = 0; afficherGG(); return montrer('gg');
+  if (courant === 'produit') { ggIndex = 0; afficherGG(); return montrer('gg'); }
+  if (courant === 'abc') {
+    rep.choix_format = val('choix_format'); if (!rep.choix_format) return erreur(s, 'Merci de choisir un des deux paquets.');
+    return montrer('controle');
   }
   if (courant === 'controle') {
     rep.controle = val('controle'); if (!rep.controle) return erreur(s, 'Merci de choisir une réponse.');
@@ -486,8 +478,8 @@ document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
     return montrer('habitudes2');
   }
   if (courant === 'habitudes2') {
-    rep.achat_lentilles = val('achat_lentilles'); rep.finir_200g = val('finir_200g'); rep.choix_format = val('choix_format');
-    if (!rep.achat_lentilles || !rep.finir_200g || !rep.choix_format) return erreur(s, 'Merci de répondre aux trois questions.');
+    rep.achat_lentilles = val('achat_lentilles'); rep.finir_200g = val('finir_200g');
+    if (!rep.achat_lentilles || !rep.finir_200g) return erreur(s, 'Merci de répondre aux deux questions.');
     return montrer('enseignes');
   }
   if (courant === 'enseignes') {
@@ -505,7 +497,7 @@ document.querySelectorAll('[data-next]').forEach(b => b.onclick = () => {
 // Gabor-Granger : un prix par écran
 let ggIndex = 0;
 function afficherGG() {
-  document.getElementById('ggPrix').textContent = PRIX_GG[ggIndex].toFixed(2).replace('.', ',') + ' €';
+  document.getElementById('ggPrix').textContent = euro(PRIX_GG[ggIndex]);
   document.getElementById('ggPos').textContent = `Prix ${ggIndex + 1} sur ${PRIX_GG.length}`;
   document.querySelectorAll('input[name="gg"]').forEach(i => i.checked = false);
   erreur(document.querySelector('[data-step="gg"]'), '');
@@ -514,7 +506,7 @@ document.getElementById('ggNext').onclick = () => {
   const v = val('gg'); if (!v) return erreur(document.querySelector('[data-step="gg"]'), 'Merci de choisir une réponse.');
   rep['gg_' + PRIX_GG[ggIndex].toFixed(2).replace('.', '_')] = +v;
   ggIndex++;
-  if (ggIndex < PRIX_GG.length) { afficherGG(); window.scrollTo(0, 0); } else montrer('controle');
+  if (ggIndex < PRIX_GG.length) { afficherGG(); window.scrollTo(0, 0); } else montrer('abc');
 };
 
 /* ================= Enregistrement ================= */
