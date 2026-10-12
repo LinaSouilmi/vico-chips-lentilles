@@ -295,8 +295,7 @@ const PRIX_GG = [3.49, 3.99, 4.49, 4.99, 5.49, 5.99, 6.49];     // ordre fixe : 
 const FORMATS = [
   ['petit', 'Petit sachet', 'moins de 100 g', 22],
   ['classique', 'Sachet classique', '100 à 150 g', 34],
-  ['grand', 'Grand format', '200 g et plus', 48],
-  ['depend', 'Cela dépend des occasions', '', 0]
+  ['grand', 'Grand format', '200 g et plus', 48]
 ];
 const CONTEXTES = [
   ['ctx_apero_amis', "À l'apéritif entre amis ou en soirée"],
@@ -333,12 +332,14 @@ const COLONNES = ['id', 'date', 'version', 'prix_200g', 'statut', 'duree_s', 'q1
   'genre', 'statut_pro', 'foyer', 'enfants', 'courses', 'region'];
 
 /* ================= Tirage au sort : A, B ou C (un tiers de chances chacune) ================= */
+// Nouveau tirage à chaque nouveau questionnaire. La version n'est gardée que si la page est rechargée
+// en cours de route (pour ne pas montrer un autre prix) ; elle est effacée dès que le questionnaire est envoyé.
 const url = new URLSearchParams(location.search);
 const TEST = url.has('test');
-let version = sessionStorage.getItem('version_abc');
-if (TEST && ['A', 'B', 'C'].includes(url.get('v'))) version = url.get('v');   // en mode test seulement : forcer une version
+const FORCEE = TEST && ['A', 'B', 'C'].includes(url.get('v')) ? url.get('v') : null;   // en mode test seulement : forcer une version
+let version = FORCEE || (TEST ? null : sessionStorage.getItem('version_abc'));
 if (!['A', 'B', 'C'].includes(version)) version = ['A', 'B', 'C'][Math.floor(Math.random() * 3)];
-sessionStorage.setItem('version_abc', version);
+if (!TEST) sessionStorage.setItem('version_abc', version);
 if (TEST) document.getElementById('testBanner').style.display = 'block';
 
 const euro = x => x.toFixed(2).replace('.', ',') + ' €';
@@ -358,7 +359,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList
 
 /* ================= Construction des questions répétitives ================= */
 document.getElementById('formats').innerHTML = FORMATS.map(([v, t, s, w]) =>
-  `<label><input type="radio" name="format_habituel" value="${v}"><span class="vis">${w ? `<img src="${IMAGE}" alt="" style="width:${w}px">` : '<span style="font-size:26px;color:#6e6e73">?</span>'}</span><span><b>${t}</b>${s ? '<br><span class="muted">' + s + '</span>' : ''}</span></label>`).join('');
+  `<label><input type="radio" name="format_habituel" value="${v}"><span class="vis"><img src="${IMAGE}" alt="" style="width:${w}px"></span><span><b>${t}</b><br><span class="muted">${s}</span></span></label>`).join('');
 document.getElementById('contextes').innerHTML = CONTEXTES.map(([n, t]) => `<label><input type="checkbox" name="ctx" value="${n}"> ${t}</label>`).join('') +
   `<label><input type="checkbox" name="ctx" value="ctx_autre" id="ctxAutre"> Autre : <input type="text" id="ctxAutreTxt" placeholder="précisez"></label>`;
 document.getElementById('grille').innerHTML = `<table class="tab-ens"><thead><tr><th></th>${ECHELLE_ENS.map(e => `<th>${e}</th>`).join('')}</tr></thead><tbody>` +
@@ -502,6 +503,7 @@ function envoyer() {
   rep.date = new Date().toISOString();
   rep.duree_s = Math.round((Date.now() - t0) / 1000);
   if (TEST) rep.statut = 'test_' + rep.statut;          // les essais sont enregistrés mais repérables
+  sessionStorage.removeItem('version_abc');              // le prochain questionnaire refait un tirage
   const ligne = COLONNES.map(c => rep[c]);
   if (!ENDPOINT) { console.table(rep); return; }
   fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ colonnes: COLONNES, ligne }) })
